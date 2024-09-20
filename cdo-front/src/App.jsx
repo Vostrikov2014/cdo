@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from './Home';
-import Login from './Login';
-import Register from './Register';
+import Home from './components/Home.jsx';
+import Login from './components/Login.jsx';
+import Register from './components/Register.jsx';
 
 const App = () => {
     return (
