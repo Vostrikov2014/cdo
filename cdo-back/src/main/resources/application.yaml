@@ -1,0 +1,22 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: cdo-back
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/cdo
+    username: vd
+    password: 111
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yaml

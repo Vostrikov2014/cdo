@@ -1,7 +1,7 @@
 package com.example.cdoback.controller;
 
-import com.example.cdoback.model.User;
-import com.example.cdoback.repository.UserRepository;
+import com.example.cdoback.model.AppUser;
+import com.example.cdoback.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private UserRepository userRepository;
+    private AppUserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody AppUser user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
         }
