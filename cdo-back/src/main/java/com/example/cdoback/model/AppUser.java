@@ -1,14 +1,16 @@
 package com.example.cdoback.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "users")
+@Table(name = "app_users")
 @Data
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
