@@ -1,37 +1,35 @@
 package com.example.cdoback.util;
 
-import com.example.cdoback.model.AppUser;
-import com.example.cdoback.repository.AppUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.cdoback.database.entity.User;
+import com.example.cdoback.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
-    @Autowired
-    private AppUserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
 
         if (userRepository.findByUsername("user").orElse(null) == null) {
-            AppUser user = new AppUser();
+            User user = new User();
             user.setUsername("user");
             user.setPassword(passwordEncoder.encode("password"));
-            user.setRole("ROLE_USER");
+            user.setRole("USER");
             userRepository.save(user);
         }
 
         if (userRepository.findByUsername("admin").orElse(null) == null) {
-            AppUser admin = new AppUser();
+            User admin = new User();
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("admin"));
-            admin.setRole("ROLE_ADMIN");
+            admin.setRole("ADMIN");
             userRepository.save(admin);
         }
     }

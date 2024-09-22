@@ -1,20 +1,18 @@
 package com.example.cdoback.service;
 
+import com.example.cdoback.database.entity.User;
 import com.example.cdoback.dto.UserRegistrationDto;
-import com.example.cdoback.model.AppUser;
-import com.example.cdoback.repository.AppUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.cdoback.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserRegistrationService {
 
-    @Autowired
-    private AppUserRepository appUserRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository appUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public String register(UserRegistrationDto registrationDto) {
 
@@ -29,10 +27,10 @@ public class UserRegistrationService {
         }
 
         // Сохранение нового пользователя
-        AppUser newUser = new AppUser();
+        User newUser = new User();
         newUser.setUsername(registrationDto.getUsername());
         newUser.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-        newUser.setRole("ROLE_USER"); // Назначаем пользователю роль
+        newUser.setRole("USER"); // Назначаем пользователю роль
 
         appUserRepository.save(newUser);
         return null; // Возвращаем null, если регистрация прошла успешно

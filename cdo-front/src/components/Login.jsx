@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import API_BASE_URL from '../config.js';
+import { BASE_URL } from '../config';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -8,9 +8,12 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        axios.post(`${API_BASE_URL}/login`, {username, password})
+        axios.post(`${BASE_URL}/login`, { username, password })
             .then(() => window.location = '/home')
-            .catch((error) => alert("Invalid credentials"));
+            .catch((error) => {
+                console.error(error);
+                alert("Invalid credentials / Недействительные учетные данные")
+            });
     };
 
     return (

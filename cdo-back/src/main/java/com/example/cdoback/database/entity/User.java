@@ -1,4 +1,4 @@
-package com.example.cdoback.model;
+package com.example.cdoback.database.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "app_users")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppUser {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +22,5 @@ public class AppUser {
     private String password;
 
     @Column(nullable = false)
-    private String role; // Example: ROLE_USER or ROLE_ADMIN
+    private String role;      // Example: ROLE_USER or ROLE_ADMIN
 }
