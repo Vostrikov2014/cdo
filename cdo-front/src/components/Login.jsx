@@ -14,19 +14,23 @@ const Login = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="d-flex justify-content-center align-items-center vh-100 vw-100">
             <div className="card p-4" style={{width: '400px'}}>
                 <h2 className="text-center">Login</h2>
                 <form onSubmit={handleLogin}>
                     <div className="form-group mb-3">
                         <label>Username</label>
-                        <input type="text" className="form-control" value={username}
+                        <input type="text" className="form-control" placeholder="Enter your username" value={username}
                                onChange={(e) => setUsername(e.target.value)}/>
                     </div>
                     <div className="form-group mb-3">
                         <label>Password</label>
-                        <input type="password" className="form-control" value={password}
+                        <input type="password" className="form-control" placeholder="Enter your password" value={password}
                                onChange={(e) => setPassword(e.target.value)}/>
+                    </div>
+                    <div className="mb-3 form-check">
+                        <input type="checkbox" className="form-check-input" id="rememberMe"/>
+                        <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
                     </div>
                     <button type="submit" className="btn btn-primary w-100">Login</button>
                 </form>
