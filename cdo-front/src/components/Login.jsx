@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
-import { BASE_URL } from '../config';
+import {BASE_URL} from '../config';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -8,7 +8,7 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        axios.post(`${BASE_URL}/login`, { username, password })
+        axios.post(`${BASE_URL}/login`, {username, password})
             .then(() => window.location = '/home')
             .catch((error) => {
                 console.error(error);
@@ -17,7 +17,28 @@ const Login = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100 vw-100">
+        <div className="d-flex justify-content-center align-items-center"
+             style={{
+                 height: '100vh',
+                 width: '100vw',
+                 backgroundColor: 'lightgreen',
+                 backgroundImage: `url(/images/MoscowStateUniversity.webp)`,
+                 backgroundSize: 'cover',
+                 backgroundPosition: 'center',
+                 backgroundRepeat: 'no-repeat'
+             }}
+        >
+            <h1
+                style={{
+                    color: 'orange',
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    fontWeight: 'bold'
+                }}
+            >
+                CDO:ONLINE
+            </h1>
             <div className="card p-4" style={{width: '400px'}}>
                 <h2 className="text-center">Login</h2>
                 <form onSubmit={handleLogin}>
@@ -28,7 +49,8 @@ const Login = () => {
                     </div>
                     <div className="form-group mb-3">
                         <label>Password</label>
-                        <input type="password" className="form-control" placeholder="Enter your password" value={password}
+                        <input type="password" className="form-control" placeholder="Enter your password"
+                               value={password}
                                onChange={(e) => setPassword(e.target.value)}/>
                     </div>
                     <div className="mb-3 form-check">
