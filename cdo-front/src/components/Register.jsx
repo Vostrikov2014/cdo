@@ -14,7 +14,7 @@ const Register = () => {
         setSuccess(false);
 
         try {
-            const response = await axios.post('/api/auth/register', {
+            const response = await axios.post('/auth/register', {
                 username,
                 password,
                 email,

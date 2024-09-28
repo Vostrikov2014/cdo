@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")                              // Protect /user endpoints for USER role
-                        .requestMatchers("/","/register", "/login", "/css/**").permitAll() // Allow public access to these URLs
+                        .requestMatchers("/","auth/register", "auth/login", "/css/**").permitAll() // Allow public access to these URLs
                         .anyRequest().authenticated())
                 .build();
     }
