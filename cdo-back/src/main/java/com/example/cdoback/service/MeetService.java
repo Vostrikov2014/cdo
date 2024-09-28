@@ -3,7 +3,7 @@ package com.example.cdoback.service;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JitsiMeetService {
+public class MeetService {
 
     // Логика для генерации имени комнаты
     public String generateRoomName() {

@@ -2,30 +2,32 @@ import React from 'react';
 
 const Home = () => {
     return (
-        <div className="d-flex justify-content-center align-items-center"
-             style={{
-                 height: '100vh',
-                 width: '100vw',
-                 backgroundColor: 'lightgreen',
-                 backgroundImage: `url(/images/MoscowStateUniversity.webp)`,
-                 backgroundSize: 'cover',
-                 backgroundPosition: 'center',
-                 backgroundRepeat: 'no-repeat'
-             }}
-        >
+        <div
+            style={{
+                position: 'relative',   // Контейнер остается относительно страницы
+                height: '100vh',        // Полная высота экрана
+                width: '100vw',         // Полная ширина экрана
+                padding: '20px',        // Отступы
+                color: 'black'
+            }}>
+
             <h1
                 style={{
                     color: 'orange',
-                    position: 'absolute',
+                    position: 'absolute', // Абсолютное позиционирование
                     top: '20px',
-                    right: '20px',
+                    right: '20px',        // Привязка к правому верхнему углу
                     fontWeight: 'bold'
-                }}
-            >
+                }}>
                 CDO:ONLINE
             </h1>
+
+            <h1>Welcom!</h1>
+            <a href="/create-conference">Create new conference</a>
+            <h2>Yours conference:</h2>
         </div>
-    );
+
+    )
 };
 
 export default Home;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
-public class MainController {
+public class HomeController {
 
     private final ConferenceService conferenceService;
 
@@ -25,14 +25,14 @@ public class MainController {
     }
 
     // Страница создания конференции
-    @GetMapping("/conference/create")
+    @GetMapping("/create")
     public String showCreateConferenceForm(Model model) {
         model.addAttribute("conference", new Conference());
         return "createConference"; // Ссылка на createConference.html
     }
 
     // Обработка формы создания конференции
-    @PostMapping("/conference/create")
+    @PostMapping("/create")
     public String createConference(@ModelAttribute("conference") Conference conference,
                                    @AuthenticationPrincipal UserDetails userDetails) {
         conferenceService.createConference(conference, userDetails.getUsername());
@@ -40,7 +40,7 @@ public class MainController {
     }
 
     // Запуск конференции
-    @GetMapping("/conference/start/{id}")
+    @GetMapping("/start/{id}")
     public String startConference(@PathVariable Long id, Model model) {
         Conference conference = conferenceService.findConferenceById(id);
         model.addAttribute("conferenceUrl", "https://online3.spa.msu.ru/" + conference.getConferenceName());
