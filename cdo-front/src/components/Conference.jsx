@@ -1,39 +1,45 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useRef} from 'react';
 
-const Conference = ({ message, roomName }) => {
+const Conference = ({roomName}) => {
+    const jitsiContainerRef = useRef(null);
+
     useEffect(() => {
-        const domain = "online3.spa.msu.ru";
-        const options = {
-            roomName: roomName, // Имя комнаты, переданное через пропсы
-            width: '100%',
-            height: 700,
-            parentNode: document.querySelector('#meet'),
-        };
-        const api = new window.JitsiMeetExternalAPI(domain, options);
+        if (window.JitsiMeetExternalAPI) {
+            const domain = "online3.spa.msu.ru";
+            const options = {
+                roomName: roomName,
+                width: '100%',
+                height: '100%',
+                parentNode: jitsiContainerRef.current
+            };
 
-        // Установка отображаемого имени пользователя
-        api.executeCommand('displayName', 'My Display Name');
+            const api = new window.JitsiMeetExternalAPI(domain, options);
 
-        // Обработчик события при присоединении нового участника
-        api.addEventListener('participantJoined', (event) => {
-            console.log("Новый участник присоединился:", event.id);
-        });
+            // Set the display name
+            api.executeCommand('displayName', 'My Display Name');
 
-        // Обработчик события при выходе из конференции
-        api.addEventListener('videoConferenceLeft', (event) => {
-            console.log("Конференция завершена:", event.roomName);
-        });
+            // Add event listeners
+            api.addEventListener('participantJoined', (event) => {
+                console.log("New participant joined:", event.id);
+            });
 
-        // Очистка при размонтировании компонента
-        return () => {
-            api.dispose();
-        };
+            api.addEventListener('videoConferenceLeft', (event) => {
+                console.log("Conference left:", event.roomName);
+            });
+
+            // Clean up on component unmount
+            return () => api.dispose();
+        } else {
+            console.error('Jitsi Meet API script not loaded');
+        }
     }, [roomName]);
 
     return (
-        <div>
-            <h1>{message || 'Присоединиться к конференции'}</h1>
-            <div id="meet"></div>
+        <div style={{ width: '100vw', height: '100vh' }}>
+            <div
+                ref={jitsiContainerRef}
+                style={{width: '100%', height: '100%'}}
+            />
         </div>
     );
 };

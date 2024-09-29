@@ -9,9 +9,9 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "conferences")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
 public class Conference {
 

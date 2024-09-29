@@ -5,6 +5,8 @@ import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
 import Conference from "./components/Conference.jsx";
 import CreateConference from "./components/CreateConference.jsx";
+import ConferenceList from "./components/ConferenceList.jsx";
+import ConferenceDetails from "./components/ConferenceDetails.jsx";
 
 const App = () => {
     return (
@@ -12,7 +14,7 @@ const App = () => {
              style={{
                  height: '100vh',
                  width: '100vw',
-                 backgroundImage: `url(/images/MoscowStateUniversity.webp)`,
+                 backgroundImage: `url(/images/welcome-background.jpg)`,
                  backgroundSize: 'cover',
                  backgroundPosition: 'center',
                  backgroundRepeat: 'no-repeat'
@@ -23,8 +25,10 @@ const App = () => {
                     <Route path="/login" element={<Login/>}/>
                     <Route path="/register" element={<Register/>}/>
                     <Route path="/home" element={<Home/>}/>
-                    <Route path="/create-conference" element={<CreateConference/>}/>
-                    <Route path="/conference" element={<Conference/>}/>
+                    <Route path="/create-conference" element={<CreateConference />}/>
+                    <Route path="/list-conference" element={<ConferenceList />}/>
+                    <Route path="/conference/:roomName" element={<Conference />}/>
+                    <Route path="/conference-details/:id" element={<ConferenceDetails />}/>
                 </Routes>
             </Router>
         </div>

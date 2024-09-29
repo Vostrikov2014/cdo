@@ -17,17 +17,7 @@ const Login = () => {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center"
-             style={{
-                 height: '100vh',
-                 width: '100vw',
-                 backgroundColor: 'lightgreen',
-                 backgroundImage: `url(/images/MoscowStateUniversity.webp)`,
-                 backgroundSize: 'cover',
-                 backgroundPosition: 'center',
-                 backgroundRepeat: 'no-repeat'
-             }}
-        >
+        <div>
             <h1
                 style={{
                     color: 'orange',

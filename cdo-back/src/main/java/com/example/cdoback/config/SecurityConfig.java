@@ -25,7 +25,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")                              // Protect /user endpoints for USER role
-                        .requestMatchers("/","auth/register", "auth/login", "/css/**").permitAll() // Allow public access to these URLs
+                        .requestMatchers("/","auth/register", "auth/login", "/css/**",
+                                "conference/create", "conference/list").permitAll() // Allow public access to these URLs
                         .anyRequest().authenticated())
                 .build();
     }
@@ -33,9 +34,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));    // Разрешить запросы с порта 3000
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));     // Разрешить запросы с порта 3000
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE")); // Разрешить методы
-        configuration.setAllowedHeaders(List.of("*"));                        // Разрешить любые заголовки
+        configuration.setAllowedHeaders(List.of("*"));                         // Разрешить любые заголовки
         configuration.setAllowCredentials(true);                                  // Разрешить отправку cookie
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

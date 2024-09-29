@@ -20,7 +20,8 @@ public class ConferenceController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
-        String hostUsername = userDetails.getUsername();
+        //String hostUsername = userDetails.getUsername();
+        String hostUsername = "xxx";
         List<Conference> conferences = conferenceService.findAllByHostUsername(hostUsername);
         return ResponseEntity.ok(conferences);
     }
@@ -34,7 +35,8 @@ public class ConferenceController {
 
     @PostMapping("/create")
     public ResponseEntity<Conference> createConference(@RequestBody Conference conference, @AuthenticationPrincipal UserDetails userDetails) {
-        String hostUsername = userDetails.getUsername();
+        //String hostUsername = userDetails.getUsername();
+        String hostUsername = "xxx";
         Conference createdConference = conferenceService.createConference(conference, hostUsername);
         return ResponseEntity.ok(createdConference);
     }
