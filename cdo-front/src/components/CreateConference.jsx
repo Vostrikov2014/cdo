@@ -50,7 +50,12 @@ const CreateConference = () => {
     };
 
     return (
-        <div className="card p-4" style={{ width: '400px' }}>
+        <div className="card p-5"
+             style={{
+                 width: '450px',
+                 backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                 border: '1px solid rgba(0, 0, 0, 0.1)',
+             }}>
             <h2>Create conference</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -82,7 +87,7 @@ const CreateConference = () => {
                         required
                     />
                 </div>
-                <button type="submit" className="btn btn-primary w-100">Create</button>
+                <button type="submit" className="btn btn-primary w-100" style={{backgroundColor: '#0f47ad'}}>Create</button>
             </form>
         </div>
     );
