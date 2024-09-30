@@ -11,9 +11,18 @@ import Logo from './components/Logo.jsx';
 
 const App = () => {
     const location = useLocation();
+    const [username, setUsername] = useState(null);
+
+    // Check for user authentication and set the username
+    useEffect(() => {
+        // Assume you store the username in localStorage or sessionStorage after login
+        const storedUsername = localStorage.getItem('username'); // Replace with sessionStorage if necessary
+        setUsername(storedUsername);
+    }, []);
 
     // Conditionally render the Logo component based on the current path
     const showLogo = location.pathname !== '/' && location.pathname !== '/login';
+    const showUsername = location.pathname !== '/' && location.pathname !== '/login';
 
     return (
         <div className="d-flex justify-content-center align-items-center"
@@ -29,6 +38,19 @@ const App = () => {
                 <div className="position-absolute top-0 start-0 p-5">
                     <Logo/>
                 </div>
+            )}
+            {showUsername && username && (
+                <h4
+                    style={{
+                        color: '#e0956a',
+                        position: 'absolute',
+                        top: '50px',
+                        right: '40px',
+                        fontWeight: 'bold',
+                        zIndex: 9999 // Ensure it stays on top of other elements
+                    }}>
+                    Welcome, {username}
+                </h4>
             )}
             <h1
                 style={{

@@ -1,8 +1,7 @@
 package com.example.cdoback.controller;
 
-import com.example.cdoback.database.entity.User;
 import com.example.cdoback.dto.LoginRequestDto;
-import com.example.cdoback.repository.UserRepository;
+import com.example.cdoback.security.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserRepository userRepository;
+    private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
@@ -28,7 +27,7 @@ public class AuthController {
 
         log.info("Login attempt for username: {}", loginRequestDto.getUsername());
 
-        return userRepository.findByUsername(loginRequestDto.getUsername())
+        return appUserRepository.findByUsername(loginRequestDto.getUsername())
                 .filter(user -> passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword()))
                 .map(user -> {
                     log.info("Login successful for username: {}", user.getUsername());

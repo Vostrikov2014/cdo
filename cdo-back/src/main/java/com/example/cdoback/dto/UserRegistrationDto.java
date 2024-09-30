@@ -1,6 +1,6 @@
 package com.example.cdoback.dto;
 
-import com.example.cdoback.database.entity.Role;
+import com.example.cdoback.security.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

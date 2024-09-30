@@ -1,5 +1,6 @@
-package com.example.cdoback.config;
+package com.example.cdoback.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,13 +14,16 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AppUserDetailsService appUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf
-                //        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))      // Enable CSRF with cookies
+                        //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))      // Enable CSRF with cookies
                         .ignoringRequestMatchers("/**"))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))                  // Enable CORS
                 .authorizeHttpRequests(auth -> auth
@@ -27,7 +31,9 @@ public class SecurityConfig {
                         .requestMatchers("/user/**").hasRole("USER")                              // Protect /user endpoints for USER role
                         .requestMatchers("/","auth/register", "auth/login", "/css/**",
                                 "conference/create", "conference/list").permitAll() // Allow public access to these URLs
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
+                .userDetailsService(appUserDetailsService)
                 .build();
     }
 

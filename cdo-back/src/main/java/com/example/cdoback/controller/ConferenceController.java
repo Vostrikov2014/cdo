@@ -20,8 +20,11 @@ public class ConferenceController {
 
     @GetMapping("/list")
     public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
-        //String hostUsername = userDetails.getUsername();
+
         String hostUsername = "xxx";
+        if (userDetails != null) {
+            hostUsername = userDetails.getUsername();
+        }
         List<Conference> conferences = conferenceService.findAllByHostUsername(hostUsername);
         return ResponseEntity.ok(conferences);
     }
