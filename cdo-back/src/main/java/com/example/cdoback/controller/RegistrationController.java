@@ -1,8 +1,8 @@
 package com.example.cdoback.controller;
 
-import com.example.cdoback.dto.UserRegistrationDto;
+import com.example.cdoback.dto.RegistrationDto;
 import com.example.cdoback.service.UserRegistrationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/reg")
+@RequiredArgsConstructor
 public class RegistrationController {
 
-    @Autowired
-    private UserRegistrationService userRegistrationService;
+    private final UserRegistrationService userRegistrationService;
 
     // Отображение страницы регистрации
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new UserRegistrationDto());
+        model.addAttribute("user", new RegistrationDto());
         return "register";
     }
 
     // Обработка формы регистрации
     @PostMapping("/register")
-    public String registerUser(UserRegistrationDto registrationDto, Model model) {
+    public String registerUser(RegistrationDto registrationDto, Model model) {
         String errorMessage = userRegistrationService.register(registrationDto);
         if (errorMessage != null) {
             model.addAttribute("error", errorMessage);

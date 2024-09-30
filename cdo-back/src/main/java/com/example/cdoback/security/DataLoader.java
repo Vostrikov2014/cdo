@@ -9,28 +9,28 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
-    private final AppUserRepository appUserRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
 
-        if (appUserRepository.findByUsername("user").orElse(null) == null) {
-            AppUser appUser = AppUser.builder()
+        if (userRepository.findByUsername("user").orElse(null) == null) {
+            UserEntity userEntity = UserEntity.builder()
                     .username("user")
                     .password(passwordEncoder.encode("password"))
-                    .role(Role.ROLE_USER)
+                    .role(Role.USER)
                     .build();
-            appUserRepository.save(appUser);
+            userRepository.save(userEntity);
         }
 
-        if (appUserRepository.findByUsername("admin").orElse(null) == null) {
-            AppUser appUser = AppUser.builder()
+        if (userRepository.findByUsername("admin").orElse(null) == null) {
+            UserEntity userEntity = UserEntity.builder()
                     .username("admin")
                     .password(passwordEncoder.encode("admin"))
-                    .role(Role.ROLE_ADMIN)
+                    .role(Role.ADMIN)
                     .build();
-            appUserRepository.save(appUser);
+            userRepository.save(userEntity);
         }
     }
 }

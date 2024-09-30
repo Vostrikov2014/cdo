@@ -1,11 +1,18 @@
 package com.example.cdoback.controller;
 
-import com.example.cdoback.dto.LoginRequestDto;
-import com.example.cdoback.security.AppUserRepository;
+import com.example.cdoback.dto.LoginDto;
+import com.example.cdoback.dto.RegistrationDto;
+import com.example.cdoback.security.Role;
+import com.example.cdoback.security.UserEntity;
+import com.example.cdoback.security.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,34 +26,47 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AppUserRepository appUserRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+        log.info("Login attempt for username: {}", loginDto.getUsername());
 
-        log.info("Login attempt for username: {}", loginRequestDto.getUsername());
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return appUserRepository.findByUsername(loginRequestDto.getUsername())
-                .filter(user -> passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword()))
+        log.info("User signed succes!: {}", loginDto.getUsername());
+
+        return new ResponseEntity<>("User signed succes!", HttpStatus.OK);
+
+        /*return userRepository.findByUsername(loginDto.getUsername())
+                .filter(user -> passwordEncoder.matches(loginDto.getPassword(), user.getPassword()))
                 .map(user -> {
                     log.info("Login successful for username: {}", user.getUsername());
                     return ResponseEntity.ok("Login successful");
                 })
                 .orElseGet(() -> {
-                    log.warn("Invalid login credentials for username: {}", loginRequestDto.getUsername());
+                    log.warn("Invalid login credentials for username: {}", loginDto.getUsername());
                     return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
-                });
+                });*/
     }
 
-   /* @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody AppUser user) {
-        if (appUserRepository.findByUsername(user.getUsername()).isPresent()) {
-            return ResponseEntity.badRequest().body("Username already exists");
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody RegistrationDto registrationDto) {
+        if (userRepository.existsByUsername(registrationDto.getUsername())) {
+            return new ResponseEntity<>("User is token!", HttpStatus.BAD_REQUEST);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("ROLE_USER");
-        appUserRepository.save(user);
-        return ResponseEntity.ok("User registered successfully");
-    }*/
+
+        UserEntity user = UserEntity.builder()
+                .username(registrationDto.getUsername())
+                .password(passwordEncoder.encode(registrationDto.getPassword()))
+                .role(Role.USER)
+                .build();
+        userRepository.save(user);
+
+        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+    }
 }

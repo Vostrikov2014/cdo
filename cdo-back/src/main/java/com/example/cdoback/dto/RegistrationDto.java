@@ -1,16 +1,12 @@
 package com.example.cdoback.dto;
 
 import com.example.cdoback.security.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegistrationDto {
+public class RegistrationDto {
     private String username;
     private String password;
     private String confirmPassword;

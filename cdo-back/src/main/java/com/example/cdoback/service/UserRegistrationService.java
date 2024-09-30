@@ -1,8 +1,8 @@
 package com.example.cdoback.service;
 
-import com.example.cdoback.security.AppUser;
-import com.example.cdoback.dto.UserRegistrationDto;
-import com.example.cdoback.security.AppUserRepository;
+import com.example.cdoback.security.UserEntity;
+import com.example.cdoback.dto.RegistrationDto;
+import com.example.cdoback.security.UserRepository;
 import com.example.cdoback.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserRegistrationService {
 
-    private final AppUserRepository appUserRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public String register(UserRegistrationDto registrationDto) {
+    public String register(RegistrationDto registrationDto) {
 
         // Проверка, что пользователь с таким именем уже существует
-        if (appUserRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
             return "Пользователь с таким именем уже существует";
         }
 
@@ -28,12 +28,12 @@ public class UserRegistrationService {
         }
 
         // Сохранение нового пользователя
-        AppUser newAppUser = AppUser.builder()
+        UserEntity newUserEntity = UserEntity.builder()
                 .username(registrationDto.getUsername())
                 .password(passwordEncoder.encode(registrationDto.getPassword()))
-                .role(Role.ROLE_USER)
+                .role(Role.USER)
                 .build();
-        appUserRepository.save(newAppUser);
+        userRepository.save(newUserEntity);
 
         return null;
     }
