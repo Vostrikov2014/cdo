@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,17 +27,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf
+                //.csrf(csrf -> csrf
                         //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))      // Enable CSRF with cookies
-                        .ignoringRequestMatchers("/**"))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))                  // Enable CORS
+                //        .ignoringRequestMatchers("/**"))
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasRole("USER")                              // Protect /user endpoints for USER role
-                        .requestMatchers("/","auth/register", "auth/login", "/css/**",
-                                "conference/create", "conference/list").permitAll() // Allow public access to these URLs
-                        .anyRequest().authenticated()
-                )
+                        //.requestMatchers("/**").hasRole("USER")
+                        .requestMatchers("/", "auth/register", "auth/login", "/css/**",
+                                "conference/create", "conference/list").permitAll()             // Allow public access to these URLs
+                        .anyRequest().authenticated())
+                //.sessionManagement(session -> session
+                //        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .userDetailsService(userDetailsService)
                 .build();
     }

@@ -2,13 +2,17 @@ package com.example.cdoback.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -25,5 +29,16 @@ public class CastomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new User(user.getUsername(), user.getPassword(), Collections.singleton(user.getRole()));
+        //return new User(user.getUsername(), user.getPassword(), getAuthorities(user.getRole().name()));
+    }
+
+    private List<GrantedAuthority> getAuthorities(List<String> roles) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        for (String role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+
+        return authorities;
     }
 }

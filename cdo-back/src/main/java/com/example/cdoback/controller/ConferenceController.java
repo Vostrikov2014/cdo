@@ -2,14 +2,20 @@ package com.example.cdoback.controller;
 
 import com.example.cdoback.database.entity.Conference;
 import com.example.cdoback.service.ConferenceService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,12 +27,19 @@ public class ConferenceController {
     @GetMapping("/list")
     public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
 
-        String hostUsername = "xxx";
-        if (userDetails != null) {
-            hostUsername = userDetails.getUsername();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(", "));
+
+        if (username.equals("anonymousUser")) {
+            return ResponseEntity.ok(conferenceService.findAll());
+        } else if (userDetails != null) {
+            return ResponseEntity.ok(conferenceService.findAllByHostUsername(userDetails.getUsername()));
+        } else {
+            return ResponseEntity.ok(conferenceService.findAllByHostUsername("xxx"));
         }
-        List<Conference> conferences = conferenceService.findAllByHostUsername(hostUsername);
-        return ResponseEntity.ok(conferences);
     }
 
     @GetMapping("/{id}")
