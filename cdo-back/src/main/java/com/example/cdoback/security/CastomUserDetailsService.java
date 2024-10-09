@@ -25,11 +25,10 @@ public class CastomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("Попытка загрузки пользователя с именем: {}", username);
 
-        UserEntity user = userRepository.findByUsername(username)
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new User(user.getUsername(), user.getPassword(), Collections.singleton(user.getRole()));
-        //return new User(user.getUsername(), user.getPassword(), getAuthorities(user.getRole().name()));
+        return new User(userEntity.getUsername(), userEntity.getPassword(), Collections.singleton(userEntity.getRole()));
     }
 
     private List<GrantedAuthority> getAuthorities(List<String> roles) {

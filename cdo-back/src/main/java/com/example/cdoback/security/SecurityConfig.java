@@ -3,11 +3,15 @@ package com.example.cdoback.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,31 +21,32 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
+@EnableMethodSecurity        //Spring 107 Method Security - использовать для проверки аутентификации
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CastomUserDetailsService userDetailsService;
+    private final CastomUserDetailsService castomUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 //.csrf(csrf -> csrf
-                        //.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))      // Enable CSRF with cookies
+                //        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))      // Enable CSRF with cookies
                 //        .ignoringRequestMatchers("/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")                              // Protect /user endpoints for USER role
-                        //.requestMatchers("/**").hasRole("USER")
+                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.getAuthority())
+                        .requestMatchers("/user/**").hasRole(Role.USER.getAuthority())            // Protect /user endpoints for USER role
                         .requestMatchers("/", "auth/register", "auth/login", "/css/**",
                                 "conference/create", "conference/list").permitAll()             // Allow public access to these URLs
                         .anyRequest().authenticated())
                 //.sessionManagement(session -> session
                 //        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .userDetailsService(userDetailsService)
+                .userDetailsService(castomUserDetailsService)
                 .build();
     }
 
@@ -66,5 +71,14 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // это вроде как для получения пользователя, но без аутентификации у меня не сработало
+    // это тоже можно удалить потом
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return () -> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                .map(authentication -> (UserDetails) authentication.getPrincipal())
+                .map(UserDetails::getUsername);
     }
 }

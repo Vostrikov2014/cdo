@@ -2,6 +2,7 @@ package com.example.cdoback.controller;
 
 import com.example.cdoback.dto.LoginDto;
 import com.example.cdoback.dto.RegistrationDto;
+import com.example.cdoback.security.CastomUserDetailsService;
 import com.example.cdoback.security.Role;
 import com.example.cdoback.security.UserEntity;
 import com.example.cdoback.security.UserRepository;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,31 +38,28 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final CastomUserDetailsService castomUserDetailsService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
+
         log.info("Login attempt for username: {}", loginDto.getUsername());
 
-        return userRepository.findByUsername(loginDto.getUsername())
-                .filter(user -> passwordEncoder.matches(loginDto.getPassword(), user.getPassword()))
-                .map(user -> {
-                    //Authentication authentication = authenticationManager
-                    //        .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+        UserDetails user = castomUserDetailsService.loadUserByUsername(loginDto.getUsername());
 
-                    // Сохранение текущего залогиненного пользователя
-                    List<GrantedAuthority> authorities = new ArrayList<>();
-                    authorities.add(new SimpleGrantedAuthority(Role.USER.getAuthority()));
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword(), authorities);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+        // Проверка пароля
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
+            log.warn("Invalid login credentials for username: {}", loginDto.getUsername());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
+        }
 
-                    log.info("Login successful for username: {}", user.getUsername());
-                    return ResponseEntity.ok("Login successful");
+        // Сохранение текущего залогиненного пользователя
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities()));
 
-                })
-                .orElseGet(() -> {
-                    log.warn("Invalid login credentials for username: {}", loginDto.getUsername());
-                    return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
-                });
+        log.info("Login successful for username: {}", user.getUsername());
+        return ResponseEntity.ok("Login successful");
+
     }
 
     @PostMapping("/register")

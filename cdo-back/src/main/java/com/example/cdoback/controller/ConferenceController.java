@@ -5,9 +5,12 @@ import com.example.cdoback.service.ConferenceService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 public class ConferenceController {
 
     private final ConferenceService conferenceService;
+    private final AuditorAware<String> auditorAware; // пример - это можно удалить
 
     @GetMapping("/list")
     public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
@@ -50,8 +54,14 @@ public class ConferenceController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Conference> createConference(@RequestBody Conference conference, @AuthenticationPrincipal UserDetails userDetails) {
-        //String hostUsername = userDetails.getUsername();
+    public ResponseEntity<Conference> createConference(@RequestBody Conference conference,
+                                                       @CurrentSecurityContext SecurityContext securityContext,
+                                                       @AuthenticationPrincipal UserDetails userDetails) {
+        String hostUsername1 = securityContext.getAuthentication().getName();
+        if (userDetails != null) {
+            String hostUsername2 = userDetails.getUsername();
+        }
+        //String hostUsername3 = auditorAware.getCurrentAuditor().orElse("Unknown");
         String hostUsername = "xxx";
         Conference createdConference = conferenceService.createConference(conference, hostUsername);
         return ResponseEntity.ok(createdConference);
