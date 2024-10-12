@@ -50,7 +50,7 @@ public class SecurityConfig {
                 //.sessionManagement(session -> session
                 //        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .userDetailsService(castomUserDetailsService)                                       // Использование кастомного UserDetailsService
-                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)        // Добавляем JWT фильтр
+                //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)        // Добавляем JWT фильтр
                 .build();
     }
 
