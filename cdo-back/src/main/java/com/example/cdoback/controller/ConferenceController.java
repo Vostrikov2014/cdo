@@ -27,6 +27,7 @@ public class ConferenceController {
 
     private final ConferenceService conferenceService;
     private final AuditorAware<String> auditorAware; // пример - это можно удалить
+    private final HttpSession session;
 
     @GetMapping("/list")
     public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
@@ -55,14 +56,26 @@ public class ConferenceController {
 
     @PostMapping("/create")
     public ResponseEntity<Conference> createConference(@RequestBody Conference conference,
-                                                       @CurrentSecurityContext SecurityContext securityContext,
+                                                       //@CurrentSecurityContext SecurityContext securityContext,
                                                        @AuthenticationPrincipal UserDetails userDetails) {
-        String hostUsername1 = securityContext.getAuthentication().getName();
+        String hostUsername = "";
+        //hostUsername = securityContext.getAuthentication().getName();
         if (userDetails != null) {
-            String hostUsername2 = userDetails.getUsername();
+            hostUsername = userDetails.getUsername();
+        } else {
+            hostUsername = "xxx";
         }
-        //String hostUsername3 = auditorAware.getCurrentAuditor().orElse("Unknown");
-        String hostUsername = "xxx";
+        //hostUsername = auditorAware.getCurrentAuditor().orElse("Unknown");
+        SecurityContext securityContext =
+                (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
+
+        Authentication authentication = securityContext.getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        if (principal instanceof UserDetails) {
+            hostUsername = ((UserDetails) principal).getUsername();  // Получение имени пользователя
+        }
+
         Conference createdConference = conferenceService.createConference(conference, hostUsername);
         return ResponseEntity.ok(createdConference);
     }

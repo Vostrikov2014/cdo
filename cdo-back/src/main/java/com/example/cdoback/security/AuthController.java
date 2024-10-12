@@ -1,17 +1,11 @@
-package com.example.cdoback.controller;
+package com.example.cdoback.security;
 
-import com.example.cdoback.security.AuthRequest;
 import com.example.cdoback.dto.RegistrationDto;
-import com.example.cdoback.security.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,10 +40,10 @@ public class AuthController {
         }
 
         // Сохранение текущего залогиненного пользователя
-        SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities()));
+        //SecurityContextHolder.getContext()
+          //      .setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities()));
 
-        try {
+        /*try {
             // Аутентификация пользователя
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(AuthRequest.getUsername(), AuthRequest.getPassword()));
@@ -60,10 +54,10 @@ public class AuthController {
 
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username/password");
-        }
+        }*/
 
-        //log.info("Login successful for username: {}", user.getUsername());
-        //return ResponseEntity.ok("Login successful");
+        log.info("Login successful for username: {}", user.getUsername());
+        return ResponseEntity.ok("Login successful");
 
     }
 

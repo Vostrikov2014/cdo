@@ -1,5 +1,8 @@
 server:
   port: 8090
+  servlet:
+    session:
+      timeout: 10000m  # Срок жизни сессии — 10000 минут
 
 spring:
   application:

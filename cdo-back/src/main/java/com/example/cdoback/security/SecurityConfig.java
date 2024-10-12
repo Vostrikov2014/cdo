@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -47,8 +48,9 @@ public class SecurityConfig {
                         .requestMatchers("/", "auth/register", "auth/login", "/css/**",
                                 "conference/create", "conference/list").permitAll()             // Allow public access to these URLs
                         .anyRequest().authenticated())
-                //.sessionManagement(session -> session
-                //        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                .sessionManagement(session -> session
+                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession) // Защита от фиксации сессии
+                        .maximumSessions(1))  // Ограничение на одну сессию
                 .userDetailsService(castomUserDetailsService)                                       // Использование кастомного UserDetailsService
                 //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)        // Добавляем JWT фильтр
                 .build();
