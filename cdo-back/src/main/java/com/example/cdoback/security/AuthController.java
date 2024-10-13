@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,27 +26,29 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final CastomUserDetailsService castomUserDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest AuthRequest) {
+    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
 
-        log.info("Login attempt for username: {}", AuthRequest.getUsername());
+        //TODO тут нужно переделать заполнение аутентификации
+        // вернуть проверку а потом идентификацию или как то еще...
+        /*log.info("Login attempt for username: {}", authRequest.getUsername());
 
-        UserDetails user = castomUserDetailsService.loadUserByUsername(AuthRequest.getUsername());
+        UserDetails user = userDetailsServiceImpl.loadUserByUsername(authRequest.getUsername());
 
         // Проверка пароля
-        if (!passwordEncoder.matches(AuthRequest.getPassword(), user.getPassword())) {
-            log.warn("Invalid login credentials for username: {}", AuthRequest.getUsername());
+        if (!passwordEncoder.matches(authRequest.getPassword(), user.getPassword())) {
+            log.warn("Invalid login credentials for username: {}", authRequest.getUsername());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
         }
 
         // Сохранение текущего залогиненного пользователя
-        //SecurityContextHolder.getContext()
-          //      .setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities()));
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities()));
 
-        /*try {
+        *//*try {
             // Аутентификация пользователя
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(AuthRequest.getUsername(), AuthRequest.getPassword()));
@@ -54,11 +59,32 @@ public class AuthController {
 
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username/password");
-        }*/
+        }*//*
 
         log.info("Login successful for username: {}", user.getUsername());
-        return ResponseEntity.ok("Login successful");
+        return ResponseEntity.ok("Login successful");*/
 
+        log.info("Login attempt for username: {}", authRequest.getUsername());
+
+        try {
+            // Выполнение аутентификации
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+            // Сохраняем аутентификацию в SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // Успешная аутентификация, можно вернуть информацию о пользователе
+            UserDetails user = userDetailsServiceImpl.loadUserByUsername(authRequest.getUsername());
+
+            // Возвращаем успешный ответ, например, имя пользователя
+            return ResponseEntity.ok("Login successful for user: " + user.getUsername());
+
+        } catch (Exception e) {
+            log.warn("Invalid login credentials for username: {}", authRequest.getUsername());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid credentials");
+        }
     }
 
     @PostMapping("/register")

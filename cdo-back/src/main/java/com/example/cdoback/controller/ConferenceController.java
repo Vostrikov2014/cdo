@@ -30,7 +30,8 @@ public class ConferenceController {
     private final HttpSession session;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails)
+    {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -56,24 +57,11 @@ public class ConferenceController {
 
     @PostMapping("/create")
     public ResponseEntity<Conference> createConference(@RequestBody Conference conference,
-                                                       //@CurrentSecurityContext SecurityContext securityContext,
+                                                       @CurrentSecurityContext(expression = "authentication") Authentication authentication,
                                                        @AuthenticationPrincipal UserDetails userDetails) {
-        String hostUsername = "";
-        //hostUsername = securityContext.getAuthentication().getName();
-        if (userDetails != null) {
-            hostUsername = userDetails.getUsername();
-        } else {
-            hostUsername = "xxx";
-        }
-        //hostUsername = auditorAware.getCurrentAuditor().orElse("Unknown");
-        SecurityContext securityContext =
-                (SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
-
-        Authentication authentication = securityContext.getAuthentication();
-        Object principal = authentication.getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            hostUsername = ((UserDetails) principal).getUsername();  // Получение имени пользователя
+        String hostUsername = "null";
+        if (authentication != null && authentication.isAuthenticated()) {
+            hostUsername =  authentication.getName();
         }
 
         Conference createdConference = conferenceService.createConference(conference, hostUsername);

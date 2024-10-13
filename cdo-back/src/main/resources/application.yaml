@@ -2,7 +2,9 @@ server:
   port: 8090
   servlet:
     session:
-      timeout: 10000m  # Срок жизни сессии — 10000 минут
+      timeout: 2000m   # Срок жизни сессии — 2000 минут
+      cookie:
+        secure: false  # Разрешить отправку cookie через HTTP
 
 spring:
   application:

@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CastomUserDetailsService implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -28,7 +28,10 @@ public class CastomUserDetailsService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        return new User(userEntity.getUsername(), userEntity.getPassword(), Collections.singleton(userEntity.getRole()));
+        return new User(
+                userEntity.getUsername(),
+                userEntity.getPassword(),
+                Collections.singleton(userEntity.getRole()));
     }
 
     private List<GrantedAuthority> getAuthorities(List<String> roles) {

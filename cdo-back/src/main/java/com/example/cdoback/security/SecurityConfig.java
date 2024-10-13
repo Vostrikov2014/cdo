@@ -10,13 +10,14 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,14 +32,14 @@ import java.util.Optional;
 public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
-    private final CastomUserDetailsService castomUserDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
 
     // Основной метод конфигурации безопасности
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                //.csrf(csrf -> csrf
-                //        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))      // Enable CSRF with cookies
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))        // Enable CSRF with cookies
                 //        .ignoringRequestMatchers("/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -46,13 +47,14 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.getAuthority())
                         .requestMatchers("/user/**").hasRole(Role.USER.getAuthority())            // Protect /user endpoints for USER role
                         .requestMatchers("/", "auth/register", "auth/login", "/css/**",
-                                "conference/create", "conference/list").permitAll()             // Allow public access to these URLs
+                                "conference/create", "conference/list", "/session-id", "/current-user").permitAll()   // Allow public access to these URLs
                         .anyRequest().authenticated())
+                .securityContext(securityContext -> securityContext
+                        .securityContextRepository(new HttpSessionSecurityContextRepository()))      // Ограничение на одну сессию
                 .sessionManagement(session -> session
-                        .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession) // Защита от фиксации сессии
-                        .maximumSessions(1))  // Ограничение на одну сессию
-                .userDetailsService(castomUserDetailsService)                                       // Использование кастомного UserDetailsService
-                //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)        // Добавляем JWT фильтр
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))                   // Создание сессии при необходимости
+                .userDetailsService(userDetailsServiceImpl)                                          // Использование кастомного UserDetailsService
+                //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)       // Добавляем JWT фильтр
                 .build();
     }
 
