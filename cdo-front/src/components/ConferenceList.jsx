@@ -28,8 +28,7 @@ const ConferenceList = () => {
 
     return (
         <div className="container"
-             style={{minHeight: '100vh', paddingTop: '40px'}}
-        >
+             style={{minHeight: '100vh', paddingTop: '40px'}}>
             <h2 className="text-center mb-4" style={{fontWeight: 'bold'}}>Your Conferences</h2>
             <div className="row">
                 {conferences.length > 0 ? (
@@ -41,10 +40,8 @@ const ConferenceList = () => {
                             }}>
                                 <div className="card-body">
                                     <h5 className="card-title">{conference.conferenceName}</h5>
-                                    <p className="card-text">Start
-                                        Time: {new Date(conference.startTime).toLocaleString()}</p>
-                                    <p className="card-text">End
-                                        Time: {new Date(conference.endTime).toLocaleString()}</p>
+                                    <p className="card-text">Start Time: {new Date(conference.startTime).toLocaleString()}</p>
+                                    <p className="card-text">End Time: {new Date(conference.endTime).toLocaleString()}</p>
                                     <a href={`/conference/${conference.conferenceName}`} className="btn btn-primary" style={{backgroundColor: '#0f47ad'}}>
                                         Start conf
                                     </a>

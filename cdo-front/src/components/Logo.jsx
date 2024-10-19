@@ -1,12 +1,17 @@
-// src/components/Logo.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Logo = () => {
+const Logo = ({disableLink}) => {
     return (
-        <Link to="/">
-            <img src="/images/logocdo.svg" alt="Logo" style={{ width: '55px', height: 'auto' }} />
-        </Link>
+        <>
+            {disableLink ? (
+                <img src="/images/logocdo.svg" alt="Logo" style={{width: '55px', height: 'auto'}}/>
+            ) : (
+                <Link to="/">
+                    <img src="/images/logocdo.svg" alt="Logo" style={{width: '55px', height: 'auto'}}/>
+                </Link>
+            )}
+        </>
     );
 };
 

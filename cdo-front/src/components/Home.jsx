@@ -27,26 +27,20 @@ const Home = () => {
     if (error) return <div>{error}</div>;
 
     return (
-        <div
-            style={{
-                position: 'relative',   // Контейнер остается относительно страницы
-                height: '100vh',        // Полная высота экрана
-                width: '100vw',         // Полная ширина экрана
-                padding: '20px',        // Отступы
-                color: 'black',         // Цвет текста
-            }}>
-            <div className="container mt-5">
-                <h1 className="text-center mb-4" style={{fontWeight: 'bold'}}>Your Conferences</h1>
-                <div className="d-flex justify-content mb-4">
-                    <a href="/create-conference"
-                       className="btn btn-lg"
+        <div className="container"
+             style={{minHeight: '100vh', paddingTop: '0px'}}>
+            <div className="container-fluid p-2">
+                <h3 className="text mb-3" style={{fontWeight: 'bold'}}>Conferences</h3>
+                <div className="d-flex justify-content-end mb-4">
+                    <a href="/create-conference" className="btn"
                        style={{
-                           fontWeight: 'bold',
+                           height: '33px',
                            backgroundColor: '#e0956a',  // Light green color
                            color: 'white',              // Text color
-                           border: '1px solid rgba(0, 0, 0, 0.1)'  // Light border for better visibility
+                           border: '1px solid rgba(0, 0, 0, 0.1)',  // Light border for better visibility
+                           padding: '0 20px'
                        }}>
-                        Create New Conference
+                        + Create new conference
                     </a>
                 </div>
                 <div className="row">
@@ -63,8 +57,8 @@ const Home = () => {
                                             Time: {new Date(conference.startTime).toLocaleString()}</p>
                                         <p className="card-text">End
                                             Time: {new Date(conference.endTime).toLocaleString()}</p>
-                                        <a href={`/conference/${conference.conferenceName}`}
-                                           className="btn btn-primary" style={{backgroundColor: '#0f47ad'}}>
+                                        <a href={`/conference/${conference.conferenceName}`} className="btn btn-primary"
+                                           style={{backgroundColor: '#0f47ad'}}>
                                             Start conf
                                         </a>
                                     </div>
