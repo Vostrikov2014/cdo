@@ -34,6 +34,7 @@ public class AuthController {
 
         //TODO тут нужно переделать заполнение аутентификации
         // вернуть проверку а потом идентификацию или как то еще...
+
         /*log.info("Login attempt for username: {}", authRequest.getUsername());
 
         UserDetails user = userDetailsServiceImpl.loadUserByUsername(authRequest.getUsername());

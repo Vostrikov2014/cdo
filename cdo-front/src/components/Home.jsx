@@ -33,7 +33,7 @@ const Home = () => {
                 height: '100vh',        // Полная высота экрана
                 width: '100vw',         // Полная ширина экрана
                 padding: '20px',        // Отступы
-                color: 'wight'
+                color: 'black',         // Цвет текста
             }}>
             <div className="container mt-5">
                 <h1 className="text-center mb-4" style={{fontWeight: 'bold'}}>Your Conferences</h1>

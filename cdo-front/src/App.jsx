@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation  } from 'react-router-dom';
+import Logo from './components/Logo.jsx';
+import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
@@ -7,7 +9,6 @@ import Conference from "./components/Conference.jsx";
 import CreateConference from "./components/CreateConference.jsx";
 import ConferenceList from "./components/ConferenceList.jsx";
 import ConferenceDetails from "./components/ConferenceDetails.jsx";
-import Logo from './components/Logo.jsx';
 
 const App = () => {
     const location = useLocation();
@@ -21,7 +22,7 @@ const App = () => {
     }, []);
 
     // Conditionally render the Logo component based on the current path
-    const showLogo = location.pathname !== '/' && location.pathname !== '/login';
+    const showLogo = location.pathname !== '/login';
     const showUsername = location.pathname !== '/' && location.pathname !== '/login';
 
     return (
@@ -63,7 +64,7 @@ const App = () => {
                 CDO: ONLINE
             </h1>
             <Routes>
-                <Route path="/" element={<Login/>}/>
+                <Route path="/" element={<Index/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/home" element={<Home/>}/>
