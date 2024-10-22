@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 
-const Conference = ({roomName}) => {
+const ConfStart = ({roomName}) => {
     const jitsiContainerRef = useRef(null);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ const Conference = ({roomName}) => {
             });
 
             api.addEventListener('videoConferenceLeft', (event) => {
-                console.log("Conference left:", event.roomName);
+                console.log("ConfStart left:", event.roomName);
             });
 
             // Clean up on component unmount
@@ -44,4 +44,4 @@ const Conference = ({roomName}) => {
     );
 };
 
-export default Conference;
+export default ConfStart;

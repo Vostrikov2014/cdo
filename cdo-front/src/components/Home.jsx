@@ -30,12 +30,12 @@ const Home = () => {
         <div className="container"
              style={{minHeight: '100vh', paddingTop: '0px'}}>
             <div className="container-fluid p-2">
-                <h3 className="text mb-3" style={{fontWeight: 'bold'}}>Conferences</h3>
+                <h3 className="text mb-3" style={{fontWeight: 'bold'}}>Конференции</h3>
                 <div className="d-flex justify-content-end mb-4">
                     <a href="/create-conference" className="btn"
                        style={{
                            height: '33px',
-                           backgroundColor: '#e0956a',  // Light green color
+                           backgroundColor: '#0f47ad',  // Light green color
                            color: 'white',              // Text color
                            border: '1px solid rgba(0, 0, 0, 0.1)',  // Light border for better visibility
                            padding: '0 20px'

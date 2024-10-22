@@ -5,11 +5,14 @@ import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
-import Conference from "./components/Conference.jsx";
-import CreateConference from "./components/CreateConference.jsx";
-import ConferenceList from "./components/ConferenceList.jsx";
-import ConferenceDetails from "./components/ConferenceDetails.jsx";
-import Layout from './components/Layout';
+import ConfStart from "./components/ConfStart.jsx";
+import ConfCreateUpdate from "./components/ConfCreateUpdate.jsx";
+import ConfList from "./components/ConfList.jsx";
+import ConfDetails from "./components/ConfDetails.jsx";
+import Layout from './components/Layout.jsx';
+import ConfActive from "./components/ConfActive.jsx";
+import UnderConstruction from "./components/UnderConstruction.jsx";
+import ConfDelete from "./components/ConfDelete.jsx";
 
 const App = () => {
     const location = useLocation();
@@ -70,7 +73,7 @@ const App = () => {
                 <Routes>
                     <Route path="/" element={<Index/>}/>
                     <Route path="/login" element={<Login/>}/>
-                    <Route path="/conference/:roomName" element={<Conference/>}/>
+                    <Route path="/conference/:roomName" element={<ConfStart/>}/>
                 </Routes>
             </div>
         ) : (
@@ -88,11 +91,14 @@ const App = () => {
                         </div>
                     )}
                     <Routes>
+                        <Route path="/under-construction" element={<UnderConstruction />} />
                         <Route path="/register" element={<Register/>}/>
                         <Route path="/home" element={<Home/>}/>
-                        <Route path="/create-conference" element={<CreateConference/>}/>
-                        <Route path="/list-conference" element={<ConferenceList/>}/>
-                        <Route path="/conference-details/:id" element={<ConferenceDetails/>}/>
+                        <Route path="/create-conference" element={<ConfCreateUpdate/>}/>
+                        <Route path="/delete-conference" element={<ConfDelete/>}/>
+                        <Route path="/list-conference" element={<ConfList/>}/>
+                        <Route path="/conference-details/:id" element={<ConfDetails/>}/>
+                        <Route path="/active-conf" element={<ConfActive/>}/>
                     </Routes>
                 </div>
             </Layout>

@@ -41,7 +41,7 @@ const Index = () => {
                 }}>
                 <input
                     type = "text"
-                    placeholder = "Conference ID"
+                    placeholder = "ConfStart ID"
                     className = "form-control mb-3"
                     style = {{ width: '470px', height: '65px', paddingRight: '70px' }} // Отступ для кнопки
                     value = {conferenceId} // Устанавливаем значение из состояния

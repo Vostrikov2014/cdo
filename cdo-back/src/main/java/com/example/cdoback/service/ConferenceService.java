@@ -21,6 +21,10 @@ public class ConferenceService {
         return conferenceRepository.save(conference);
     }
 
+    public Conference updateConference(Conference updatedConference) {
+        return conferenceRepository.save(updatedConference);  // Сохраняет обновленные данные конференции
+    }
+
     public Optional<Conference> getConference(Long id) {
         return conferenceRepository.findById(id);
     }

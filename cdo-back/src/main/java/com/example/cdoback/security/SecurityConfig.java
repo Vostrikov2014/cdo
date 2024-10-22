@@ -38,8 +38,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))        // Enable CSRF with cookies
+                //.csrf(csrf -> csrf
+                //        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))        // Enable CSRF with cookies
                 //        .ignoringRequestMatchers("/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -47,7 +47,8 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.getAuthority())
                         .requestMatchers("/user/**").hasRole(Role.USER.getAuthority())            // Protect /user endpoints for USER role
                         .requestMatchers("/", "auth/register", "auth/login", "/css/**",
-                                "conference/create", "conference/list", "/session-id", "/current-user").permitAll()   // Allow public access to these URLs
+                                "conference/create", "conference/update", "conference/",
+                                "conference/list", "/session-id", "/current-user").permitAll()   // Allow public access to these URLs
                         .anyRequest().authenticated())
                 .securityContext(securityContext -> securityContext
                         .securityContextRepository(new HttpSessionSecurityContextRepository()))      // Ограничение на одну сессию

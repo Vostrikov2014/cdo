@@ -1,11 +1,13 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'; // Не забудьте импортировать useLocation
 
-const Layout = ({children}) => {
+const Layout = ({ children }) => {
+    const location = useLocation(); // Получаем текущее местоположение
+
     return (
-        <div className="d-flex flex-column" style={{height: '100vh', width: '100vw'}}>
+        <div className="d-flex flex-column" style={{ height: '100vh', width: '100vw' }}>
             {/* Информационная строка */}
-            <div className="bg-dark text-light p-1" style={{height: '5vh', width: '100vw'}}>
+            <div className="bg-dark text-light p-1" style={{ height: '5vh', width: '100vw' }}>
                 <h6>Это информационная строка.</h6>
             </div>
 
@@ -18,19 +20,36 @@ const Layout = ({children}) => {
                 {/* Боковое меню */}
                 <nav className="flex-column p-3"
                      style={{ width: '250px', height: '85vh', backgroundColor: '#ececec', flexShrink: 0 }}>
-                    <h5 className="text-dark">Меню</h5>
+                    <h5 className="text-dark">Личный</h5>
                     <ul className="nav flex-column">
                         <li className="nav-item">
-                            <Link className="nav-link text-dark" to="/home">Главная страница</Link>
+                            <Link
+                                className={`nav-link ${location.pathname === '/home' ? 'text-white bg-primary' : 'text-dark'}`}
+                                to="/home">
+                                Главная страница
+                            </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link text-dark" to="/list-conference">Конференции</Link>
+                            <Link
+                                className={`nav-link ${location.pathname === '/list-conference' ||
+                                    location.pathname === '/create-conference' ? 'text-white bg-primary' : 'text-dark'}`}
+                                to="/list-conference">
+                                Конференции
+                            </Link>
                         </li>
+                    </ul>
+
+                    {/* Отступ перед заголовком "Администратор" */}
+                    <div style={{ marginTop: '20px' }} /> {/* Замените '20px' на нужный вам отступ */}
+
+                    <h5 className="text-dark">Администратор</h5>
+                    <ul className="nav flex-column">
                         <li className="nav-item">
-                            <Link className="nav-link text-dark" to="/register">Регистрация</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link text-dark" to="/create-conference">Создать конференцию</Link>
+                            <Link
+                                className={`nav-link ${location.pathname === '/under-construction' ? 'text-white bg-primary' : 'text-dark'}`}
+                                to="/under-construction">
+                                Запущенные конференции
+                            </Link>
                         </li>
                     </ul>
                 </nav>

@@ -68,6 +68,13 @@ public class ConferenceController {
         return ResponseEntity.ok(createdConference);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Conference> updateConference(@RequestBody Conference conference,
+                                                       @AuthenticationPrincipal UserDetails userDetails) {
+        Conference savedConference = conferenceService.updateConference(conference);
+        return ResponseEntity.ok(savedConference);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteConference(@PathVariable Long id) {
         conferenceService.deleteConference(id);
