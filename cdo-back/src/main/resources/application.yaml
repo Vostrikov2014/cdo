@@ -25,6 +25,10 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
-
+security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri: http://localhost:8091/realms/cdo-realm
 jwt:
   secret: yourSecretKeyHere
