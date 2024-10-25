@@ -1,5 +1,11 @@
 package com.example.cdoback.security;
 
+import com.example.cdoback.security.service.UserDetailsServiceImpl;
+import com.example.cdoback.security.util.CustomOAuth2LoginSuccessHandler;
+import com.example.cdoback.security.util.JwtTokenFilter;
+import com.example.cdoback.security.util.KeycloakLogoutHandler;
+import com.example.cdoback.security.util.KeycloakRoleConverter;
+import com.fasterxml.jackson.databind.util.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,20 +15,22 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Configuration
@@ -33,6 +41,46 @@ public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final KeycloakLogoutHandler keycloakLogoutHandler;
+    private final CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(customOAuth2LoginSuccessHandler)) // OAuth2 login with Keycloak
+                .and()
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .addLogoutHandler(keycloakLogoutHandler)
+                        .logoutSuccessUrl("/")) // Define logout URL
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(new KeycloakRoleConverter())));
+
+        return http.build();
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        String issuerUri = "http://localhost:8091/realms/cdo-realm";
+        return NimbusJwtDecoder.withJwkSetUri(issuerUri + "/protocol/openid-connect/certs").build();
+    }
+
+    @Bean
+    JwtAuthenticationConverter authenticationConverter(
+            Converter<Map<String, Object>, Collection<GrantedAuthority>> authoritiesConverter) {
+        var authenticationConverter = new JwtAuthenticationConverter();
+        authenticationConverter.setJwtGrantedAuthoritiesConverter(jwt -> {
+            return authoritiesConverter.convert(jwt.getClaims());
+        });
+        return authenticationConverter;
+    }
 
     // FOR KeyCloak
     /*@Bean
@@ -70,7 +118,7 @@ public class SecurityConfig {
     }*/
 
     // Основной метод конфигурации безопасности
-    @Bean
+    /*@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 //.csrf(csrf -> csrf
@@ -92,7 +140,7 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsServiceImpl)                                          // Использование кастомного UserDetailsService
                 //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)       // Добавляем JWT фильтр
                 .build();
-    }
+    }*/
 
     // Настройка CORS
     @Bean

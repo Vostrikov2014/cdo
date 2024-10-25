@@ -1,5 +1,8 @@
-package com.example.cdoback.security;
+package com.example.cdoback.security.util;
 
+import com.example.cdoback.security.Role;
+import com.example.cdoback.security.UserRepository;
+import com.example.cdoback.security.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

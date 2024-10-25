@@ -1,4 +1,4 @@
-package com.example.cdoback.security;
+package com.example.cdoback.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

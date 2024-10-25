@@ -9,6 +9,21 @@ server:
 spring:
   application:
     name: cdo-back
+  oauth2:
+    client:
+      registration:
+        keycloak:
+          client-id: cdo-client
+          client-secret: 73e57f27-ed7f-4d74-ad71-9e9f99b36bbf
+          authorization-grant-type: authorization_code
+          redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+          scope: openid,profile,email
+        jwt:
+          issuer-uri: http://localhost:8091/realms/cdo-realm
+      provider:
+        keycloak:
+          issuer-uri: http://localhost:8091/realms/cdo-realm
+          user-name-attribute: preferred_username
 
   datasource:
     url: jdbc:mariadb://localhost:3306/cdo
@@ -25,10 +40,5 @@ spring:
   liquibase:
     enabled: true
     change-log: classpath:/db/changelog/db.changelog-master.yaml
-security:
-  oauth2:
-    resourceserver:
-      jwt:
-        issuer-uri: http://localhost:8091/realms/cdo-realm
 jwt:
   secret: yourSecretKeyHere

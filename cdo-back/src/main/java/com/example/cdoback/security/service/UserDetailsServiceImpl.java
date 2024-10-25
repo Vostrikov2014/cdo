@@ -1,5 +1,7 @@
-package com.example.cdoback.security;
+package com.example.cdoback.security.service;
 
+import com.example.cdoback.security.UserRepository;
+import com.example.cdoback.security.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,5 +1,6 @@
-package com.example.cdoback.security;
+package com.example.cdoback.security.entity;
 
+import com.example.cdoback.security.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

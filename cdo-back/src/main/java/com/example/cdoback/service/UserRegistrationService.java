@@ -1,6 +1,6 @@
 package com.example.cdoback.service;
 
-import com.example.cdoback.security.UserEntity;
+import com.example.cdoback.security.entity.UserEntity;
 import com.example.cdoback.dto.RegistrationDto;
 import com.example.cdoback.security.UserRepository;
 import com.example.cdoback.security.Role;

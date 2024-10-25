@@ -1,4 +1,4 @@
-package com.example.cdoback.security;
+package com.example.cdoback.security.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
