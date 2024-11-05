@@ -1,4 +1,4 @@
-package com.example.cdoback.security;
+package com.example.cdoback.security.config;
 
 import com.example.cdoback.security.service.UserDetailsServiceImpl;
 import com.example.cdoback.security.util.CustomOAuth2LoginSuccessHandler;
