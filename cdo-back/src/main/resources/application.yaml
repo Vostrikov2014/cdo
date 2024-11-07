@@ -36,21 +36,6 @@ spring:
         registration:
           keycloak:
             client-id: cdo-client
-            client-secret: 73e57f27-ed7f-4d74-ad71-9e9f99b36bbf
-            scope: openid, profile
+            client-secret: QDytipc4kKuGRWG8oQRwIBLvhv9DKhrf
+            scope: openid, profile, cdo-scope, microprofile-jwt
             authorization-grant-type: authorization_code
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8091/realms/cdo-realm
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
-
-token:
-  converter:
-    principal-attribute: preferred_username
-    resource-id: cdo
-
-keycloak:
-  server-url: http://localhost:8091/
-  realm: cdo-realm
-  username: testvd
-  password: 111

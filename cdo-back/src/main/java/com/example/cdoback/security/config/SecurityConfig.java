@@ -1,18 +1,17 @@
 package com.example.cdoback.security.config;
 
 import com.example.cdoback.security.service.UserDetailsServiceImpl;
-import com.example.cdoback.security.util.CustomOAuth2LoginSuccessHandler;
 import com.example.cdoback.security.util.JwtTokenFilter;
-import com.example.cdoback.security.util.KeycloakLogoutHandler;
-import com.example.cdoback.security.util.KeycloakRoleConverter;
 import com.fasterxml.jackson.databind.util.Converter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.AbstractRequestMatcherRegistry;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,29 +40,13 @@ public class SecurityConfig {
 
     private final JwtTokenFilter jwtTokenFilter;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private final KeycloakLogoutHandler keycloakLogoutHandler;
-    private final CustomOAuth2LoginSuccessHandler customOAuth2LoginSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/user/**").hasRole("USER")
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(customOAuth2LoginSuccessHandler)) // OAuth2 login with Keycloak
-                .and()
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .addLogoutHandler(keycloakLogoutHandler)
-                        .logoutSuccessUrl("/")) // Define logout URL
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(new KeycloakRoleConverter())));
-
-        return http.build();
+        return http
+                .authorizeHttpRequests(AbstractRequestMatcherRegistry::anyRequest)
+                .oauth2Login(Customizer.withDefaults())
+                .build();
     }
 
     @Bean
@@ -82,65 +65,6 @@ public class SecurityConfig {
         return authenticationConverter;
     }
 
-    // FOR KeyCloak
-    /*@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));
-
-        return http
-                .authorizeHttpRequests(auth -> auth.requestMatchers("error").permitAll()
-                        .requestMatchers("/user/**").hasRole(Role.USER.getAuthority())
-                        .anyRequest().authenticated())
-                .build();
-    }
-
-    @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-
-        var converter = new JwtAuthenticationConverter();
-        var jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        converter.setPrincipalClaimName("preferred_username");
-        converter.setJwtGrantedAuthoritiesConverter(jwt -> {
-            var authorities = jwtGrantedAuthoritiesConverter.convert(jwt);
-            var roles = (List<String>) jwt.getClaimAsMap("realm_access").get("roles");
-
-            return Stream.concat(authorities.stream(),
-                            roles.stream()
-                                    .filter(role -> role.startsWith("ROLE_"))
-                                    .map(SimpleGrantedAuthority::new)
-                                    .map(GrantedAuthority.class::cast))
-                    .toList();
-
-        });
-
-        return converter;
-    }*/
-
-    // Основной метод конфигурации безопасности
-    /*@Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                //.csrf(csrf -> csrf
-                //        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))        // Enable CSRF with cookies
-                //        .ignoringRequestMatchers("/**"))
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.getAuthority())
-                        .requestMatchers("/user/**").hasRole(Role.USER.getAuthority())            // Protect /user endpoints for USER role
-                        .requestMatchers("/", "auth/register", "auth/login", "/css/**",
-                                "conference/create", "conference/update", "conference/",
-                                "conference/list", "/session-id", "/current-user").permitAll()   // Allow public access to these URLs
-                        .anyRequest().authenticated())
-                .securityContext(securityContext -> securityContext
-                        .securityContextRepository(new HttpSessionSecurityContextRepository()))      // Ограничение на одну сессию
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))                   // Создание сессии при необходимости
-                .userDetailsService(userDetailsServiceImpl)                                          // Использование кастомного UserDetailsService
-                //.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)       // Добавляем JWT фильтр
-                .build();
-    }*/
 
     // Настройка CORS
     @Bean
