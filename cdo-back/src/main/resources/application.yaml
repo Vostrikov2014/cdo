@@ -28,14 +28,7 @@ spring:
 
   security:
     oauth2:
-      client:
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8091/realms/cdo-realm
-            user-name-attribute: preferred_username
-        registration:
-          keycloak:
-            client-id: cdo-client
-            client-secret: QDytipc4kKuGRWG8oQRwIBLvhv9DKhrf
-            scope: openid, profile, cdo-scope, microprofile-jwt
-            authorization-grant-type: authorization_code
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8091/realms/cdo-realm
+          jwk-set-uri: http://localhost:8091/realms/cdo-realm/protocol/openid-connect/certs

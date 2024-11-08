@@ -1,7 +1,5 @@
 package com.example.cdoback.security.controller;
 
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @GetMapping("/user")
-    public String userEndpoint(@AuthenticationPrincipal Jwt principal) {
-        return "Hello, user: " + principal.getClaimAsString("preferred_username");
+    public String userEndpoint() {
+        return "Доступ для USER";
     }
 
     @GetMapping("/admin")
-    public String adminEndpoint(@AuthenticationPrincipal Jwt principal) {
-        return "Hello, admin: " + principal.getClaimAsString("preferred_username");
+    public String adminEndpoint() {
+        return "Доступ для ADMIN";
     }
 }

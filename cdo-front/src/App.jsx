@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
 import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
@@ -13,35 +13,35 @@ import Layout from './components/Layout.jsx';
 import ConfActive from "./components/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
-import Keycloak from 'keycloak-js';
-
-const keycloak = new Keycloak({
-    url: 'http://localhost:8091',
-    realm: 'cdo-realm',
-    clientId: 'cdo-client'
-});
+import { initKeycloak, isLoggedIn, getToken, doLogout } from './components/KeycloakService';
 
 const App = () => {
     const location = useLocation();
-    const [username, setUsername] = useState(null);
-    const [authenticated, setAuthenticated] = useState(false);
-
-    // Check for user authentication and set the username
-    useEffect(() => {
-        // Assume you store the username in localStorage or sessionStorage after login
-        const storedUsername = localStorage.getItem('username'); // Replace with sessionStorage if necessary
-        setUsername(storedUsername);
-    }, []);
+    const navigate = useNavigate();
+    const [username, userInfo, setUserInfo] = useState(null);
 
     useEffect(() => {
-        keycloak.init({ onLoad: 'login-required' }).then(auth => {
-            setAuthenticated(auth);
+        initKeycloak(() => {
+            fetchUserInfo();
+            //if (isLoggedIn()) {
+                navigate('/'); // Перенаправление на страницу индекса сразу после входа в систему
+            //}
         });
     }, []);
 
-    if (!authenticated) {
-        return <div>Loading...</div>;
-    }
+    const fetchUserInfo = () => {
+        fetch('http://localhost:8090/api/user', {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error('Ошибка при получении данных');
+                return response.text();
+            })
+            .then((data) => setUserInfo(data))
+            .catch((error) => console.error(error));
+    };
 
     // Conditionally render the Logo component based on the current path
     const disableLogoLink = location.pathname === '/';
@@ -54,8 +54,15 @@ const App = () => {
     return (
         <div>
             <div className="App">
-                <h1>Welcome {keycloak.tokenParsed.preferred_username}</h1>
-                <button onClick={() => keycloak.logout()}>Logout</button>
+                {isLoggedIn() ? (
+                    <div>
+                        <h1>Добро пожаловать!</h1>
+                        <p>{userInfo}</p>
+                        <button onClick={doLogout}>Выйти</button>
+                    </div>
+                ) : (
+                    <button onClick={() => window.location.reload()}>Войтии</button>
+                )}
             </div>
             {applyBackground ? (
                 <div

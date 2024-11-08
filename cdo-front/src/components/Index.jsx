@@ -55,10 +55,10 @@ const Index = () => {
                         right: '5px',
                         top: '39%',
                         transform: 'translateY(-50%)',
-                        display: 'flex', // Используем flexbox для центровки
+                        display: 'flex',          // Используем flexbox для центровки
                         justifyContent: 'center', // Центрируем по горизонтали
-                        alignItems: 'center', // Центрируем по вертикали
-                        backgroundColor: 'red', // Красный цвет для кнопки
+                        alignItems: 'center',     // Центрируем по вертикали
+                        backgroundColor: 'red',   // Красный цвет для кнопки
                         width: '50px',
                         height: '55px',
                         fontSize: '2rem',    // Размер шрифта

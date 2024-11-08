@@ -5,7 +5,6 @@ import com.example.cdoback.security.*;
 import com.example.cdoback.security.dto.AuthRequest;
 import com.example.cdoback.security.entity.UserEntity;
 import com.example.cdoback.security.service.UserDetailsServiceImpl;
-import com.example.cdoback.security.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,7 +31,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
