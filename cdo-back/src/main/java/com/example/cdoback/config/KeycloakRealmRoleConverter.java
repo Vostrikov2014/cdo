@@ -1,4 +1,4 @@
-package com.example.cdoback.security.util;
+package com.example.cdoback.config;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;

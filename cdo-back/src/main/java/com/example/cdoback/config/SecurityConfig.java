@@ -1,14 +1,10 @@
-package com.example.cdoback.security.config;
+package com.example.cdoback.config;
 
-import com.example.cdoback.security.util.JwtAuthConverter;
-import com.example.cdoback.security.util.KeycloakRealmRoleConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,9 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -34,37 +27,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final KeycloakRealmRoleConverter keycloakRealmRoleConverter;
-    private final JwtAuthConverter jwtAuthConverter;
+    private final CustomAuthenticationConverter customAuthenticationConverter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())    // Отключаем CSRF для прототипов REST API
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/user/").hasRole("USER")                     // Доступ для роли USER
-                        .requestMatchers("/api/admin/").hasRole("ADMIN")                   // Доступ для роли ADMIN
-                        .anyRequest().authenticated()                                        // Требуется аутентификация для остальных запросов
+                .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())     // Отключаем CSRF для прототипов REST API
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/api/user/**").hasRole("DEFAULT-ROLES-CDO-REALM") // Доступ для роли USER
+                        //.requestMatchers("/api/user/**").hasRole("USER")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Доступ для роли ADMIN
+                        .anyRequest().authenticated()                                         // Требуется аутентификация для остальных запросов
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt
-                                .jwtAuthenticationConverter(jwtAuthConverter))               // Настройка JWT аутентификации
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(customAuthenticationConverter)) // Настройка JWT аутентификации
                 );
 
         return http.build();
     }
 
+    // Для информации: Если приложение не предоставляет компонент JwtDecoder,
+    // то Spring Boot предоставит компонент по умолчанию, описанный ниже
     /*@Bean
-    public JwtDecoder jwtDecoder(OAuth2ResourceServerProperties properties) {
-        return JwtDecoders.fromIssuerLocation(properties.getJwt().getIssuerUri());
-    }*/
-
-    // Конвертер ролей для маппинга ролей из токена (если требуется)
-    /*@Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
-        converter.setJwtGrantedAuthoritiesConverter(keycloakRealmRoleConverter); // Кастомный конвертер ролей
-        return converter;
+    public JwtDecoder jwtDecoder() {
+        return JwtDecoders.fromIssuerLocation(issuerUri);
     }*/
 
     // Настройка CORS

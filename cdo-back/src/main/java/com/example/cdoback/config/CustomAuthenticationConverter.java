@@ -1,4 +1,4 @@
-package com.example.cdoback.security.util;
+package com.example.cdoback.config;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -17,14 +17,14 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+public class CustomAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
-    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+    private final JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
         Collection<GrantedAuthority> authorities = Stream.concat(
-                jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
+                grantedAuthoritiesConverter.convert(jwt).stream(),
                 extractRoles(jwt).stream()
         ).collect(Collectors.toSet());
 
@@ -40,23 +40,23 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
             roles.addAll((Collection<? extends String>) realmAccess.get("roles"));
         }
 
-        // Extract roles from resource_access.demo
+        // Extract roles from resource_access.account
         Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
-        if (resourceAccess != null && resourceAccess.containsKey("demo")) {
-            Map<String, Object> demoAccess = (Map<String, Object>) resourceAccess.get("demo");
+        if (resourceAccess != null && resourceAccess.containsKey("account")) {
+            Map<String, Object> demoAccess = (Map<String, Object>) resourceAccess.get("account");
             if (demoAccess != null && demoAccess.containsKey("roles")) {
                 roles.addAll((Collection<? extends String>) demoAccess.get("roles"));
             }
         }
 
-        // Debugging extracted roles
-        System.out.println("Extracted roles: " + roles);
+        // Сюда напихиваем ресурсы из которых можно достать роли
+        // ...
 
-        return roles.stream()
+
+        var simpleGrantedAuthority = roles.stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
                 .collect(Collectors.toSet());
+
+        return simpleGrantedAuthority;
     }
-
-
-
 }
