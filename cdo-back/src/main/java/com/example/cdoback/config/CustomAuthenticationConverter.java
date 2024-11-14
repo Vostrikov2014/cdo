@@ -1,62 +1,55 @@
 package com.example.cdoback.config;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.stereotype.Component;
 
-@Component
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class CustomAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
-    private final JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-
     @Override
-    public AbstractAuthenticationToken convert(Jwt jwt) {
-        Collection<GrantedAuthority> authorities = Stream.concat(
-                grantedAuthoritiesConverter.convert(jwt).stream(),
-                extractRoles(jwt).stream()
-        ).collect(Collectors.toSet());
-
-        return new JwtAuthenticationToken(jwt, authorities);
+    public AbstractAuthenticationToken convert(@NonNull Jwt source) {
+        return new JwtAuthenticationToken(
+                source,
+                Stream.concat(
+                        new JwtGrantedAuthoritiesConverter().convert(source).stream(),
+                        extractResourceRoles(source).stream()
+                ).collect(Collectors.toSet())
+        );
     }
 
-    private Collection<? extends GrantedAuthority> extractRoles(Jwt jwt) {
+    @SuppressWarnings("unchecked")
+    private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
+
+        // Храним роли из разных частей токена
         Set<String> roles = new HashSet<>();
 
-        // Extract roles from realm_access
-        Map<String, Object> realmAccess = jwt.getClaim("realm_access");
-        if (realmAccess != null && realmAccess.containsKey("roles")) {
-            roles.addAll((Collection<? extends String>) realmAccess.get("roles"));
-        }
+        // Получаем роли из realm_access
+        Optional.ofNullable((Map<String, Object>) jwt.getClaim("realm_access"))
+                .map(realmAccess -> (Collection<String>) realmAccess.get("roles"))
+                .ifPresent(roles::addAll);
 
-        // Extract roles from resource_access.account
-        Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
-        if (resourceAccess != null && resourceAccess.containsKey("account")) {
-            Map<String, Object> demoAccess = (Map<String, Object>) resourceAccess.get("account");
-            if (demoAccess != null && demoAccess.containsKey("roles")) {
-                roles.addAll((Collection<? extends String>) demoAccess.get("roles"));
-            }
-        }
+
+        // Получаем роли из resource_access.account
+        Optional.ofNullable((Map<String, Object>) jwt.getClaim("resource_access"))
+                .map(resourceAccess -> (Map<String, Object>) resourceAccess.get("account"))
+                .map(account -> (Collection<String>) account.get("roles"))
+                .ifPresent(roles::addAll);
 
         // Сюда напихиваем ресурсы из которых можно достать роли
         // ...
 
-
-        var simpleGrantedAuthority = roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(
+                        "ROLE_" + role.replace("-", "_").toUpperCase()))
                 .collect(Collectors.toSet());
-
-        return simpleGrantedAuthority;
     }
 }

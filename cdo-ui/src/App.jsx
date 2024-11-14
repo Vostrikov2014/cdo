@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
@@ -13,55 +13,42 @@ import Layout from './components/Layout.jsx';
 import ConfActive from "./components/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
-import { initKeycloak, isLoggedIn, getToken, doLogout } from './components/KeycloakService';
+import KeycloakProvider from './services/KeycloakProvider.jsx';
+import { useKeycloak } from '@react-keycloak/web';
 
 const App = () => {
     const location = useLocation();
-    const navigate = useNavigate();
-    const [username, userInfo, setUserInfo] = useState(null);
+    const [username, setUsername] = useState(null);
+    const { keycloak, initialized } = useKeycloak();
 
     useEffect(() => {
-        initKeycloak(() => {
-            fetchUserInfo();
-            //if (isLoggedIn()) {
-                navigate('/'); // Перенаправление на страницу индекса сразу после входа в систему
-            //}
-        });
-    }, []);
+        if (initialized && keycloak.authenticated) {
+            setUsername(keycloak.tokenParsed.preferred_username);
+        }
+    }, [initialized, keycloak]);
 
-    const fetchUserInfo = () => {
-        fetch('http://localhost:8090/api/user', {
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        })
-            .then((response) => {
-                if (!response.ok) throw new Error('Ошибка при получении данных');
-                return response.text();
-            })
-            .then((data) => setUserInfo(data))
-            .catch((error) => console.error(error));
-    };
+    if (!initialized) return <div>Loading...</div>;
 
-    // Conditionally render the Logo component based on the current path
+    if (!keycloak.authenticated) {
+        keycloak.login(); // Перенаправляем на страницу входа
+    }
+
+    // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
     const showLogo = location.pathname !== '/login';
     const showUsername = location.pathname !== '/login';
-    const applyBackground = location.pathname === '/' ||
-        location.pathname === '/login' ||
-        location.pathname.startsWith('/conference');
+    const applyBackground = location.pathname === '/' || location.pathname === '/login' || location.pathname.startsWith('/conference');
 
     return (
         <div>
             <div className="App">
-                {isLoggedIn() ? (
-                    <div>
-                        <h1>Добро пожаловать!</h1>
-                        <p>{userInfo}</p>
-                        <button onClick={doLogout}>Выйти</button>
-                    </div>
+                {!keycloak.authenticated ? (
+                    <button onClick={() => keycloak.login()}>Login</button>
                 ) : (
-                    <button onClick={() => window.location.reload()}>Войтии</button>
+                    <div>
+                        <button onClick={() => keycloak.logout()}>Logout</button>
+                        <h1>Welcome, {keycloak.authenticated ? keycloak.tokenParsed.preferred_username : 'Guest'}</h1>
+                    </div>
                 )}
             </div>
             {applyBackground ? (
@@ -138,7 +125,9 @@ const App = () => {
 
 const AppWrapper = () => (
     <Router>
-        <App/>
+        <KeycloakProvider>
+            <App/>
+        </KeycloakProvider>
     </Router>
 );
 

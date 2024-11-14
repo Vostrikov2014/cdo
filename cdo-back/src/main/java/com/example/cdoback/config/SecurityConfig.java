@@ -1,12 +1,10 @@
 package com.example.cdoback.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,24 +21,19 @@ import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity        // для активации аннотаций @PreAuthorize и т.п.
-@RequiredArgsConstructor
 public class SecurityConfig {
-
-    private final CustomAuthenticationConverter customAuthenticationConverter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())     // Отключаем CSRF для прототипов REST API
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/user/**").hasRole("DEFAULT-ROLES-CDO-REALM") // Доступ для роли USER
-                        //.requestMatchers("/api/user/**").hasRole("USER")
+                        .requestMatchers("/api/user/**").hasRole("DEFAULT_ROLES_CDO_REALM") // Доступ для роли USER
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Доступ для роли ADMIN
                         .anyRequest().authenticated()                                         // Требуется аутентификация для остальных запросов
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(customAuthenticationConverter)) // Настройка JWT аутентификации
+                        .jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter())) // Настройка JWT аутентификации
                 );
 
         return http.build();

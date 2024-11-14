@@ -1,5 +1,6 @@
 services:
   mariadb:
+    container_name: mariadb-cdo
     image: 'mariadb:latest'
     environment:
       - 'MARIADB_DATABASE=mydatabase'
@@ -8,3 +9,12 @@ services:
       - 'MARIADB_USER=myuser'
     ports:
       - '3306'
+
+  keycloak:
+    container_name: keycloak-cdo
+    image: quay.io/keycloak/keycloak:26.0.2
+    ports:
+      - 8091
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
