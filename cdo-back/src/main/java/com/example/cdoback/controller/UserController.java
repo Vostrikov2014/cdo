@@ -1,4 +1,4 @@
-package com.example.cdoback.security.controller;
+package com.example.cdoback.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

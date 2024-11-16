@@ -1,4 +1,4 @@
-package com.example.cdoback.security.controller;
+package com.example.cdoback.controller;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
