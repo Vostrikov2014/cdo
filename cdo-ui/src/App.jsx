@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { ReactKeycloakProvider, useKeycloak } from '@react-keycloak/web';
+import Keycloak from 'keycloak-js';
 import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
@@ -13,25 +15,27 @@ import Layout from './components/Layout.jsx';
 import ConfActive from "./components/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
-import KeycloakProvider from './services/KeycloakProvider.jsx';
-import { useKeycloak } from '@react-keycloak/web';
 
+// Основной компонент приложения
 const App = () => {
+
     const location = useLocation();
     const [username, setUsername] = useState(null);
+
+    // Используем хук useKeycloak для получения информации о Keycloak
     const { keycloak, initialized } = useKeycloak();
+    if (!initialized) return <div>Loading...</div>;
+    if (!keycloak.authenticated) {
+        keycloak.login();
+        return <div>Redirecting to login...</div>;
+    }
 
     useEffect(() => {
         if (initialized && keycloak.authenticated) {
-            setUsername(keycloak.tokenParsed.preferred_username);
+            setUsername(keycloak.tokenParsed?.preferred_username);
         }
     }, [initialized, keycloak]);
 
-    if (!initialized) return <div>Loading...</div>;
-
-    if (!keycloak.authenticated) {
-        keycloak.login(); // Перенаправляем на страницу входа
-    }
 
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
@@ -42,13 +46,13 @@ const App = () => {
     return (
         <div>
             <div className="App">
-                {!keycloak.authenticated ? (
-                    <button onClick={() => keycloak.login()}>Login</button>
-                ) : (
+                {keycloak.authenticated ? (
                     <div>
                         <button onClick={() => keycloak.logout()}>Logout</button>
-                        <h1>Welcome, {keycloak.authenticated ? keycloak.tokenParsed.preferred_username : 'Guest'}</h1>
+                        <h1>Welcome, {username}</h1>
                     </div>
+                ) : (
+                    <button onClick={() => keycloak.login()}>Login</button>
                 )}
             </div>
             {applyBackground ? (
@@ -124,11 +128,16 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-    <Router>
-        <KeycloakProvider>
-            <App/>
-        </KeycloakProvider>
-    </Router>
+    // Создаём Keycloak instance
+    <ReactKeycloakProvider authClient={new Keycloak({
+        url: 'http://localhost:8091',
+        realm: 'cdo-realm',
+        clientId: 'cdo-client',
+    })}>
+        <Router>
+            <App />
+        </Router>
+    </ReactKeycloakProvider>
 );
 
 export default AppWrapper;
