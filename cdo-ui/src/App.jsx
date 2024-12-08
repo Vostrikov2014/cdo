@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
@@ -13,7 +13,7 @@ import Layout from './components/Layout.jsx';
 import ConfActive from "./components/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
-import {useKeycloak} from '@react-keycloak/web';
+import { useKeycloak } from '@react-keycloak/web';
 
 // Основной компонент приложения
 const App = () => {

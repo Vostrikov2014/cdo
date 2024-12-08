@@ -1,6 +1,6 @@
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const ConfStart = ({roomName}) => {
+const confStart = ({roomName}) => {
     const jitsiContainerRef = useRef(null);
 
     useEffect(() => {
@@ -44,4 +44,4 @@ const ConfStart = ({roomName}) => {
     );
 };
 
-export default ConfStart;
+export default confStart;
