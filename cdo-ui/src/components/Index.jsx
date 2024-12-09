@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const Index = () => {
+const Index = (props) => {
+
+    console.log(props.title)
+    console.log(props.description)
+
     const [conferenceId, setConferenceId] = useState(''); // Состояние для хранения ID конференции
 
     const handleStartConference = () => {

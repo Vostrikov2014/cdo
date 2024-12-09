@@ -5,16 +5,21 @@ import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import Keycloak from 'keycloak-js';
-import keycloakConfig from './keycloakConfig.jsx';
+import keycloak from './keycloakConfig.jsx';
 
-// Инициализация Keycloak
-const keycloak = new Keycloak(keycloakConfig);
+// Keycloak event and token logging (optional)
+const onKeycloakEvent = (event, error) => {
+    console.log('Keycloak Event:', event, error);
+};
+
+const onKeycloakTokens = (tokens) => {
+    console.log('Keycloak Tokens:', tokens);
+};
 
 createRoot(document.getElementById('root'))
     .render(
-        <ReactKeycloakProvider authClient = { keycloak }
+        <ReactKeycloakProvider authClient={keycloak} onEvent={onKeycloakEvent} onTokens={onKeycloakTokens}
                                initOptions = {{ onLoad: 'login-required', checkLoginIframe: false }}>
-                <App/>
+            <App/>
         </ReactKeycloakProvider>
     );
