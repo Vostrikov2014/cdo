@@ -24,7 +24,7 @@ const App = () => {
     const [username, setUsername] = useState(null);
 
     // Используем хук useKeycloak для получения информации о Keycloak
-    const { keycloak, initialized } = useKeycloak();
+    const {keycloak, initialized} = useKeycloak();
     console.log(initialized)
     console.log(keycloak)
 
@@ -115,7 +115,16 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-    <ReactKeycloakProvider authClient={ keycloakConfig } initOptions = {{ onLoad: 'login-required', checkLoginIframe: false }}>
+    <ReactKeycloakProvider
+        authClient={keycloakConfig}
+        initOptions={{onLoad: 'login-required', checkLoginIframe: false}}
+        onEvent={(event, error) => {
+            if (event === 'onTokenExpired') {
+                keycloak.updateToken(70).catch(() => {
+                    keycloak.logout();
+                });
+            }
+        }}>
         <BrowserRouter>
             <App/>
         </BrowserRouter>
