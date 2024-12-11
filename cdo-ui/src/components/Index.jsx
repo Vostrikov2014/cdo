@@ -72,9 +72,6 @@ const Index = () => {
                     &#9675;
                 </button>
             </div>
-            <div style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
-                <Link to="/login" style={{color: 'white', textDecoration: 'none', fontSize: '1.5rem', fontWeight: 'bold'}}>Log in</Link>
-            </div>
         </div>
     );
 };

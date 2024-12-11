@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
+import {BrowserRouter, Link, Route, Routes, useLocation} from 'react-router-dom';
 import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
@@ -13,82 +13,113 @@ import Layout from './components/Layout.jsx';
 import ConfActive from "./components/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
+
+import {ReactKeycloakProvider} from "@react-keycloak/web";
+import keycloak from "./Keycloak.jsx"
 import {useKeycloak} from '@react-keycloak/web';
 
 // Основной компонент приложения
 const App = () => {
-    //const location = useLocation();
-    const [username, setUsername] = useState("Vostrikov");
-
-    console.log([username, setUsername])
+    const location = useLocation();
+    const [username, setUsername] = useState(null);
 
     // Используем хук useKeycloak для получения информации о Keycloak
-    /*const {keycloak, initialized} = useKeycloak();
-    if (!initialized) return <div>Loading...</div>;
-    if (!keycloak.authenticated) return <div>Not authenticated</div>;
+    const { keycloak, initialized } = useKeycloak();
+    console.log(initialized)
+    console.log(keycloak)
 
     useEffect(() => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username);
         }
-    }, [initialized, keycloak]);*/
+    }, [initialized, keycloak]);
 
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
     const showLogo = location.pathname !== '/login';
-    const showUsername = location.pathname !== '/login';
     const applyBackground = location.pathname === '/' || location.pathname === '/login' || location.pathname.startsWith('/conference');
 
     return (
-        <Router>
-            <div>
-                <div className="App"/>
-                {applyBackground ? (
-                    <div
-                        className={`d-flex justify-content-center align-items-center ${applyBackground ? '' : 'no-bg'}`}
-                        style={{ height: '100vh', width: '100vw', backgroundImage: `url(/images/welcome-background.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+        <div>
+            <div className="App"/>
+            {applyBackground ? (
+                <div
+                    className={`d-flex justify-content-center align-items-center ${applyBackground ? '' : 'no-bg'}`}
+                    style={{
+                        height: '100vh',
+                        width: '100vw',
+                        backgroundImage: `url(/images/welcome-background.jpg)`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        backgroundRepeat: 'no-repeat'
+                    }}>
+                    {showLogo && (
+                        <div className="position-absolute" style={{top: '34px', left: '30px', padding: '5px'}}>
+                            {/* <Logo disableLink={disableLogoLink}/> */} {/* Это коммент */}
+                            <Logo disableLink={disableLogoLink}/>
+                        </div>
+                    )}
+                    {username !== null ? (
+                        <h4 style={{
+                            color: '#e0956a',
+                            position: 'absolute',
+                            top: '35px',
+                            right: '50px',
+                            fontWeight: 'bold',
+                            zIndex: 9999
+                        }}>
+                            Welcome, {username}
+                        </h4>
+                    ) : (
+                        <div style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
+                            <Link to="/login"
+                                  style={{
+                                      color: 'white',
+                                      textDecoration: 'none',
+                                      fontSize: '1.5rem',
+                                      fontWeight: 'bold'
+                                  }}>Login похоже нет авторизации</Link>
+                        </div>
+                    )}
+                    <Routes>
+                        <Route path="/" element={<Index/>}/>
+                        <Route path="/login" element={<Login/>}/>
+                        <Route path="/conference/:roomName" element={<ConfStart/>}/>
+                    </Routes>
+                </div>
+
+            ) : (
+
+                <Layout>
+                    <div className="d-flex flex-grow-1">
                         {showLogo && (
                             <div className="position-absolute" style={{top: '34px', left: '30px', padding: '5px'}}>
                                 <Logo disableLink={disableLogoLink}/>
                             </div>
                         )}
-                        {showUsername && username && (
-                            <h4 style={{ color: '#e0956a', position: 'absolute', top: '50px', right: '40px', fontWeight: 'bold', zIndex: 9999 }}>
-                                Welcome, {username}
-                            </h4>
-                        )}
                         <Routes>
-                            <Route path="/" element={<Index />}/>
-                            <Route path="/login" element={<Login/>}/>
-                            <Route path="/conference/:roomName" element={<ConfStart/>}/>
+                            <Route path="/under-construction" element={<UnderConstruction/>}/>
+                            <Route path="/register" element={<Register/>}/>
+                            <Route path="/home" element={<Home/>}/>
+                            <Route path="/create-conference" element={<ConfCreateUpdate/>}/>
+                            <Route path="/delete-conference" element={<ConfDelete/>}/>
+                            <Route path="/list-conference" element={<ConfList/>}/>
+                            <Route path="/conference-details/:id" element={<ConfDetails/>}/>
+                            <Route path="/active-conf" element={<ConfActive/>}/>
                         </Routes>
                     </div>
-
-                ) : (
-
-                    <Layout>
-                        <div className="d-flex flex-grow-1">
-                            {showLogo && (
-                                <div className="position-absolute" style={{top: '34px', left: '30px', padding: '5px'}}>
-                                    <Logo disableLink={disableLogoLink}/>
-                                </div>
-                            )}
-                            <Routes>
-                                <Route path="/under-construction" element={<UnderConstruction/>}/>
-                                <Route path="/register" element={<Register/>}/>
-                                <Route path="/home" element={<Home/>}/>
-                                <Route path="/create-conference" element={<ConfCreateUpdate/>}/>
-                                <Route path="/delete-conference" element={<ConfDelete/>}/>
-                                <Route path="/list-conference" element={<ConfList/>}/>
-                                <Route path="/conference-details/:id" element={<ConfDetails/>}/>
-                                <Route path="/active-conf" element={<ConfActive/>}/>
-                            </Routes>
-                        </div>
-                    </Layout>
-                )}
-            </div>
-        </Router>
+                </Layout>
+            )}
+        </div>
     );
 };
 
-export default App;
+const AppWrapper = () => (
+    <ReactKeycloakProvider authClient={ keycloak } initOptions = {{ onLoad: 'login-required', checkLoginIframe: false }}>
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    </ReactKeycloakProvider>
+);
+
+export default AppWrapper;

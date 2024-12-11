@@ -6,7 +6,6 @@ const UnderConstruction = () => {
             <div>
                 <h1 style={{ fontSize: '5rem', margin: 0 }}>🚧</h1>
                 <h2 style={{ fontSize: '2rem', margin: '10px 0' }}>Страница в разработке</h2>
-                <p style={{ fontSize: '1.5rem', margin: 0 }}>Приходите позже!</p>
             </div>
         </div>
     );
