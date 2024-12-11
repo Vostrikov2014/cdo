@@ -15,7 +15,7 @@ import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
 
 import {ReactKeycloakProvider} from "@react-keycloak/web";
-import keycloak from "./Keycloak.jsx"
+import keycloakConfig from "./KeycloakConfig.jsx"
 import {useKeycloak} from '@react-keycloak/web';
 
 // Основной компонент приложения
@@ -115,7 +115,7 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-    <ReactKeycloakProvider authClient={ keycloak } initOptions = {{ onLoad: 'login-required', checkLoginIframe: false }}>
+    <ReactKeycloakProvider authClient={ keycloakConfig } initOptions = {{ onLoad: 'login-required', checkLoginIframe: false }}>
         <BrowserRouter>
             <App/>
         </BrowserRouter>
