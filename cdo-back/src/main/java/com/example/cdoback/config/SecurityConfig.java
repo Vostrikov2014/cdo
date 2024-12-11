@@ -32,10 +32,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Доступ для роли ADMIN
                         .anyRequest().authenticated()                                         // Требуется аутентификация для остальных запросов
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter())) // Настройка JWT аутентификации
-                );
-
+                //.oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter()))); // Настройка JWT аутентификации
+                ;
         return http.build();
     }
 

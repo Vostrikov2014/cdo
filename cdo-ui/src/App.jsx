@@ -17,11 +17,13 @@ import {useKeycloak} from '@react-keycloak/web';
 
 // Основной компонент приложения
 const App = () => {
-    const location = useLocation();
-    const [username, setUsername] = useState(null);
+    //const location = useLocation();
+    const [username, setUsername] = useState("Vostrikov");
+
+    console.log([username, setUsername])
 
     // Используем хук useKeycloak для получения информации о Keycloak
-    const {keycloak, initialized} = useKeycloak();
+    /*const {keycloak, initialized} = useKeycloak();
     if (!initialized) return <div>Loading...</div>;
     if (!keycloak.authenticated) return <div>Not authenticated</div>;
 
@@ -29,7 +31,7 @@ const App = () => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username);
         }
-    }, [initialized, keycloak]);
+    }, [initialized, keycloak]);*/
 
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
@@ -44,33 +46,19 @@ const App = () => {
                 {applyBackground ? (
                     <div
                         className={`d-flex justify-content-center align-items-center ${applyBackground ? '' : 'no-bg'}`}
-                        style={{
-                            height: '100vh',
-                            width: '100vw',
-                            backgroundImage: `url(/images/welcome-background.jpg)`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat'
-                        }}>
+                        style={{ height: '100vh', width: '100vw', backgroundImage: `url(/images/welcome-background.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
                         {showLogo && (
                             <div className="position-absolute" style={{top: '34px', left: '30px', padding: '5px'}}>
                                 <Logo disableLink={disableLogoLink}/>
                             </div>
                         )}
                         {showUsername && username && (
-                            <h4 style={{
-                                color: '#e0956a',
-                                position: 'absolute',
-                                top: '50px',
-                                right: '40px',
-                                fontWeight: 'bold',
-                                zIndex: 9999
-                            }}>
+                            <h4 style={{ color: '#e0956a', position: 'absolute', top: '50px', right: '40px', fontWeight: 'bold', zIndex: 9999 }}>
                                 Welcome, {username}
                             </h4>
                         )}
                         <Routes>
-                            <Route path="/" element={<Index title="111" description="222" />}/>
+                            <Route path="/" element={<Index />}/>
                             <Route path="/login" element={<Login/>}/>
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
                         </Routes>
