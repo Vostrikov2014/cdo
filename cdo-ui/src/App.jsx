@@ -115,16 +115,8 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-    <ReactKeycloakProvider
-        authClient={keycloakConfig}
-        initOptions={{onLoad: 'login-required', checkLoginIframe: false}}
-        onEvent={(event, error) => {
-            if (event === 'onTokenExpired') {
-                keycloak.updateToken(70).catch(() => {
-                    keycloak.logout();
-                });
-            }
-        }}>
+    <ReactKeycloakProvider authClient={keycloakConfig}
+                           initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
         <BrowserRouter>
             <App/>
         </BrowserRouter>

@@ -30,8 +30,7 @@ public class ConferenceController {
     private final HttpSession session;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails)
-    {
+    public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
