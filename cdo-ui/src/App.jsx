@@ -21,16 +21,23 @@ import {useKeycloak} from '@react-keycloak/web';
 // Основной компонент приложения
 const App = () => {
     const location = useLocation();
-    const [username, setUsername] = useState(null);
+    const [username, setUsername] = useState("");
 
     // Используем хук useKeycloak для получения информации о Keycloak
-    const {keycloak, initialized} = useKeycloak();
-    console.log(initialized)
-    console.log(keycloak)
+    const { keycloak, initialized } = useKeycloak();
+    console.log("initialized - " + initialized)
+    console.log("authenticated - " + keycloak.authenticated)
+    console.log("username - " + username)
+    console.log("preferred_username - " + keycloak.tokenParsed?.preferred_username)
+
+
+    if (!initialized) {
+        return <div>Loading...</div>;
+    }
 
     useEffect(() => {
         if (initialized && keycloak.authenticated) {
-            setUsername(keycloak.tokenParsed?.preferred_username);
+            setUsername(keycloak.tokenParsed?.preferred_username || "fix");
         }
     }, [initialized, keycloak]);
 
