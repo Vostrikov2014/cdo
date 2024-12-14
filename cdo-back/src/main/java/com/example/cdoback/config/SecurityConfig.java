@@ -30,8 +30,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)     // Отключаем CSRF для прототипов REST API
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включаем CORS
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/user/**").hasRole("DEFAULT_ROLES_CDO_REALM") // Доступ для роли USER
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")                  // Доступ для роли ADMIN
+                        .requestMatchers("/**").hasRole("DEFAULT_ROLES_CDO_REALM") // Доступ для роли USER
+                        .requestMatchers("/admin/**").hasRole("ADMIN")                  // Доступ для роли ADMIN
                         .anyRequest().authenticated()                                         // Требуется аутентификация для остальных запросов
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter()))); // Настройка JWT аутентификации

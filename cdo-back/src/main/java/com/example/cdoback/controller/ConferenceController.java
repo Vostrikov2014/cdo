@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/user/conference")
+@RequestMapping("/conference")
 public class ConferenceController {
 
     private final ConferenceService conferenceService;

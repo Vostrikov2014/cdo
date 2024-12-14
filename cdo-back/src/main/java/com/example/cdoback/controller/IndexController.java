@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/")
 @RequiredArgsConstructor
-public class HomeController {
+public class IndexController {
 
     private final ConferenceService conferenceService;
 

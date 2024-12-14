@@ -31,9 +31,9 @@ const App = () => {
     console.log("preferred_username - " + keycloak.tokenParsed?.preferred_username)
 
 
-    if (!initialized) {
+   /* if (!initialized) {
         return <div>Loading...</div>;
-    }
+    }*/
 
     useEffect(() => {
         if (initialized && keycloak.authenticated) {
