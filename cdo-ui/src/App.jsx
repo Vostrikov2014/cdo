@@ -4,6 +4,7 @@ import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
+import LoginPage from './components/LoginPage.jsx';
 import Register from './components/Register.jsx';
 import ConfStart from "./components/ConfStart.jsx";
 import ConfCreateUpdate from "./components/ConfCreateUpdate.jsx";
@@ -15,31 +16,22 @@ import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
 
 import {ReactKeycloakProvider} from "@react-keycloak/web";
-import keycloakConfig from "./KeycloakConfig.jsx"
+import keycloakConfig from "./components/KeycloakConfig.jsx"
 import {useKeycloak} from '@react-keycloak/web';
 
 // Основной компонент приложения
 const App = () => {
     const location = useLocation();
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState('');
 
     // Используем хук useKeycloak для получения информации о Keycloak
-    const { keycloak, initialized } = useKeycloak();
-    console.log("initialized - " + initialized)
-    console.log("authenticated - " + keycloak.authenticated)
-    console.log("username - " + username)
-    console.log("preferred_username - " + keycloak.tokenParsed?.preferred_username)
+    //const { keycloak, initialized } = useKeycloak();
 
-
-   /* if (!initialized) {
-        return <div>Loading...</div>;
-    }*/
-
-    useEffect(() => {
+    /*useEffect(() => {
         if (initialized && keycloak.authenticated) {
-            setUsername(keycloak.tokenParsed?.preferred_username || "fix");
+            setUsername(keycloak.tokenParsed?.preferred_username || "Гость");
         }
-    }, [initialized, keycloak]);
+    }, [initialized, keycloak]);*/
 
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
@@ -50,84 +42,86 @@ const App = () => {
         <div>
             <div className="App"/>
             {applyBackground ? (
-                <div
-                    className={`d-flex justify-content-center align-items-center ${applyBackground ? '' : 'no-bg'}`}
-                    style={{
-                        height: '100vh',
-                        width: '100vw',
-                        backgroundImage: `url(/images/welcome-background.jpg)`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat'
-                    }}>
-                    {showLogo && (
-                        <div className="position-absolute" style={{top: '34px', left: '30px', padding: '5px'}}>
-                            {/* <Logo disableLink={disableLogoLink}/> */} {/* Это коммент */}
-                            <Logo disableLink={disableLogoLink}/>
-                        </div>
-                    )}
-                    {username !== null ? (
-                        <h4 style={{
-                            color: '#e0956a',
-                            position: 'absolute',
-                            top: '35px',
-                            right: '50px',
-                            fontWeight: 'bold',
-                            zIndex: 9999
+                    <div
+                        className={`d-flex justify-content-center align-items-center ${applyBackground ? '' : 'no-bg'}`}
+                        style={{
+                            height: '100vh',
+                            width: '100vw',
+                            backgroundImage: `url(/images/welcome-background.jpg)`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat'
                         }}>
-                            Welcome, {username}
-                        </h4>
-                    ) : (
-                        <div style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
-                            <Link to="/login"
-                                  style={{
-                                      color: 'white',
-                                      textDecoration: 'none',
-                                      fontSize: '1.5rem',
-                                      fontWeight: 'bold'
-                                  }}>Login похоже нет авторизации</Link>
-                        </div>
-                    )}
-                    <Routes>
-                        <Route path="/" element={<Index/>}/>
-                        <Route path="/login" element={<Login/>}/>
-                        <Route path="/conference/:roomName" element={<ConfStart/>}/>
-                    </Routes>
-                </div>
-
-            ) : (
-
-                <Layout>
-                    <div className="d-flex flex-grow-1">
                         {showLogo && (
                             <div className="position-absolute" style={{top: '34px', left: '30px', padding: '5px'}}>
+                                {/* <Logo disableLink={disableLogoLink}/> */} {/* Это коммент */}
                                 <Logo disableLink={disableLogoLink}/>
                             </div>
                         )}
+                        {username === '' ? (
+                            <div style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
+                                <Link to="/login"
+                                      style={{
+                                          color: 'white',
+                                          textDecoration: 'none',
+                                          fontSize: '1.5rem',
+                                          fontWeight: 'bold'
+                                      }}>Log in</Link>
+                            </div>
+                        ) : (
+                            <h4 style={{
+                                color: '#e0956a',
+                                position: 'absolute',
+                                top: '35px',
+                                right: '50px',
+                                fontWeight: 'bold',
+                                zIndex: 9999
+                            }}>
+                                Welcome, {username}
+                            </h4>
+                        )}
                         <Routes>
-                            <Route path="/under-construction" element={<UnderConstruction/>}/>
-                            <Route path="/register" element={<Register/>}/>
-                            <Route path="/home" element={<Home/>}/>
-                            <Route path="/create-conference" element={<ConfCreateUpdate/>}/>
-                            <Route path="/delete-conference" element={<ConfDelete/>}/>
-                            <Route path="/list-conference" element={<ConfList/>}/>
-                            <Route path="/conference-details/:id" element={<ConfDetails/>}/>
-                            <Route path="/active-conf" element={<ConfActive/>}/>
+                            <Route path="/" element={<Index/>}/>
+                            <Route path="/login" element={<LoginPage/>}/>
+                            <Route path="/conference/:roomName" element={<ConfStart/>}/>
                         </Routes>
                     </div>
-                </Layout>
-            )}
+
+                )
+                :
+                (
+
+                    <Layout>
+                        <div className="d-flex flex-grow-1">
+                            {showLogo && (
+                                <div className="position-absolute" style={{top: '34px', left: '30px', padding: '5px'}}>
+                                    <Logo disableLink={disableLogoLink}/>
+                                </div>
+                            )}
+                            <Routes>
+                                <Route path="/under-construction" element={<UnderConstruction/>}/>
+                                <Route path="/register" element={<Register/>}/>
+                                <Route path="/home" element={<Home/>}/>
+                                <Route path="/create-conference" element={<ConfCreateUpdate/>}/>
+                                <Route path="/delete-conference" element={<ConfDelete/>}/>
+                                <Route path="/list-conference" element={<ConfList/>}/>
+                                <Route path="/conference-details/:id" element={<ConfDetails/>}/>
+                                <Route path="/active-conf" element={<ConfActive/>}/>
+                            </Routes>
+                        </div>
+                    </Layout>
+                )}
         </div>
     );
 };
 
 const AppWrapper = () => (
-    <ReactKeycloakProvider authClient={keycloakConfig}
-                           initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
-        <BrowserRouter>
-            <App/>
-        </BrowserRouter>
-    </ReactKeycloakProvider>
+    //<ReactKeycloakProvider authClient={keycloakConfig}
+    //                       initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>
+    //</ReactKeycloakProvider>
 );
 
 export default AppWrapper;

@@ -1,10 +1,22 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {BASE_URL} from '../config';
+import {ReactKeycloakProvider} from "@react-keycloak/web";
+import keycloakConfig from "./KeycloakConfig.jsx";
+import { useKeycloak } from '@react-keycloak/web';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    // Используем хук useKeycloak для получения информации о Keycloak
+    const { keycloak, initialized } = useKeycloak();
+
+    useEffect(() => {
+        if (initialized && keycloak.authenticated) {
+            setUsername(keycloak.tokenParsed?.preferred_username || "fix");
+        }
+    }, [initialized, keycloak]);
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -51,4 +63,11 @@ const Login = () => {
     );
 };
 
-export default Login;
+const LoginWrapper = () => (
+    <ReactKeycloakProvider authClient={keycloakConfig}
+                           initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
+        <Login/>
+    </ReactKeycloakProvider>
+);
+
+export default LoginWrapper;
