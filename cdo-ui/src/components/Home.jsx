@@ -21,6 +21,7 @@ const Home = () => {
         };
 
         fetchConferences();
+
     }, []);
 
     if (loading) return <div>Loading...</div>;

@@ -86,11 +86,9 @@ const App = () => {
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
                         </Routes>
                     </div>
-
                 )
                 :
                 (
-
                     <Layout>
                         <div className="d-flex flex-grow-1">
                             {showLogo && (
@@ -116,12 +114,12 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-    //<ReactKeycloakProvider authClient={keycloakConfig}
-    //                       initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
-    <BrowserRouter>
-        <App/>
-    </BrowserRouter>
-    //</ReactKeycloakProvider>
+    <ReactKeycloakProvider authClient={keycloakConfig}
+                           initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
+        <BrowserRouter>
+            <App/>
+        </BrowserRouter>
+    </ReactKeycloakProvider>
 );
 
 export default AppWrapper;
