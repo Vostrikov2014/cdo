@@ -114,12 +114,11 @@ const App = () => {
 };
 
 const AppWrapper = () => (
-    <ReactKeycloakProvider authClient={keycloakConfig}
-                           initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
+    //<ReactKeycloakProvider authClient={keycloakConfig} initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
         <BrowserRouter>
             <App/>
         </BrowserRouter>
-    </ReactKeycloakProvider>
+    //</ReactKeycloakProvider>
 );
 
 export default AppWrapper;

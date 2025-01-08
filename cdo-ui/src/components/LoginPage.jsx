@@ -13,7 +13,7 @@ const LoginPage = () => {
     useEffect(() => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username || 'Unknown');
-            navigate('/home'); // Redirect to HomePage when authenticated
+            navigate('/home');   // Redirect to HomePage when authenticated
         }
     }, [initialized, keycloak, navigate]);
 
@@ -30,11 +30,11 @@ const LoginPage = () => {
     )
 };
 
-/*const LoginPageWrapper = () => (
+const LoginPageWrapper = () => (
     <ReactKeycloakProvider authClient={keycloakConfig}
                            initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
         <LoginPage/>
     </ReactKeycloakProvider>
-);*/
+);
 
-export default LoginPage;
+export default LoginPageWrapper;

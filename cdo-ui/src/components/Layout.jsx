@@ -5,13 +5,13 @@ import {useKeycloak} from "@react-keycloak/web";
 const Layout = ({children}) => {
     const location = useLocation(); // Получаем текущее местоположение
     const [username, setUsername] = useState('Unknown');
-    const {keycloak, initialized} = useKeycloak();
+    //const {keycloak, initialized} = useKeycloak();
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username || 'Unknown');
         }
-    }, [initialized, keycloak]);
+    }, [initialized, keycloak]);*/
 
     return (
         <div className="d-flex flex-column" style={{height: '100vh', width: '100vw'}}>
