@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: vd
+      changes:
+        - sqlFile:
+            path: change/create_app_users.sql
+            relativeToChangelogFile: true
+            splitStatements: false

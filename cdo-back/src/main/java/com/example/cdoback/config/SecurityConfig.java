@@ -26,7 +26,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        /*http
                 .csrf(AbstractHttpConfigurer::disable)     // Отключаем CSRF для прототипов REST API
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включаем CORS
                 .authorizeHttpRequests(authorize -> authorize
@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")                      // Доступ для роли ADMIN
                         .anyRequest().authenticated()                                         // Требуется аутентификация для остальных запросов
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter()))); // Настройка JWT аутентификации
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter())));*/ // Настройка JWT аутентификации
 
         return http.build();
     }

@@ -82,7 +82,7 @@ const App = () => {
                         )}
                         <Routes>
                             <Route path="/" element={<Index/>}/>
-                            <Route path="/login" element={<LoginPage/>}/>
+                            <Route path="/login" element={<Login/>}/>
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
                         </Routes>
                     </div>

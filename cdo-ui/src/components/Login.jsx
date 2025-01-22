@@ -10,13 +10,13 @@ const Login = () => {
     const [password, setPassword] = useState('');
 
     // Используем хук useKeycloak для получения информации о Keycloak
-    const { keycloak, initialized } = useKeycloak();
+    /*const { keycloak, initialized } = useKeycloak();
 
     useEffect(() => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username || "fix");
         }
-    }, [initialized, keycloak]);
+    }, [initialized, keycloak]);*/
 
     const handleLogin = (e) => {
         e.preventDefault();
@@ -64,10 +64,10 @@ const Login = () => {
 };
 
 const LoginWrapper = () => (
-    <ReactKeycloakProvider authClient={keycloakConfig}
-                           initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
+    //<ReactKeycloakProvider authClient={keycloakConfig}
+    //                       initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
         <Login/>
-    </ReactKeycloakProvider>
+    //</ReactKeycloakProvider>
 );
 
 export default LoginWrapper;
