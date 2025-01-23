@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {BASE_URL} from '../config';
-import {ReactKeycloakProvider} from "@react-keycloak/web";
-import keycloakConfig from "./KeycloakConfig.jsx";
-import { useKeycloak } from '@react-keycloak/web';
+
+//import {ReactKeycloakProvider} from "@react-keycloak/web";
+//import keycloakConfig from "./KeycloakConfig.jsx";
+//import { useKeycloak } from '@react-keycloak/web';
 
 const Login = () => {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -22,8 +24,8 @@ const Login = () => {
         e.preventDefault();
         axios.post(`${BASE_URL}/auth/login`, {username, password})
             .then(() => window.location = '/home')
-            .catch((error) => {
-                console.error(error);
+            .catch((err) => {
+                console.error(err);
                 alert("Invalid credentials / Недействительные учетные данные")
             });
     };
@@ -54,7 +56,8 @@ const Login = () => {
                     <input type="checkbox" className="form-check-input" id="rememberMe"/>
                     <label className="form-check-label" htmlFor="rememberMe">Remember me</label>
                 </div>
-                <button type="submit" className="btn btn-primary w-100" style={{backgroundColor: '#0f47ad'}}>Login</button>
+                <button type="submit" className="btn btn-primary w-100" style={{backgroundColor: '#0f47ad'}}>Login
+                </button>
             </form>
             <div className="mt-3 text-center">
                 <p>Don't have an account? <a href="/register" className="btn btn-link">Register</a></p>
@@ -66,7 +69,7 @@ const Login = () => {
 const LoginWrapper = () => (
     //<ReactKeycloakProvider authClient={keycloakConfig}
     //                       initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
-        <Login/>
+    <Login/>
     //</ReactKeycloakProvider>
 );
 

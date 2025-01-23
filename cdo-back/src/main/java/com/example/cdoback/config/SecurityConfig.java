@@ -1,15 +1,20 @@
 package com.example.cdoback.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -24,19 +29,49 @@ import java.util.Optional;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    // Определение BCryptPasswordEncoder для кодирования паролей
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        /*http
-                .csrf(AbstractHttpConfigurer::disable)     // Отключаем CSRF для прототипов REST API
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включаем CORS
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+        //Keycloak
+        /*httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)                              // Отключаем CSRF для прототипов REST API
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Включаем CORS
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**").hasRole("DEFAULT_ROLES_CDO_REALM")          // Доступ для роли USER
-                        .requestMatchers("/admin/**").hasRole("ADMIN")                      // Доступ для роли ADMIN
-                        .anyRequest().authenticated()                                         // Требуется аутентификация для остальных запросов
+                        .requestMatchers("/**").hasRole("DEFAULT_ROLES_CDO_REALM")  // Доступ для роли USER
+                        .requestMatchers("/admin/**").hasRole("ADMIN")              // Доступ для роли ADMIN
+                        .anyRequest().authenticated()                               // Требуется аутентификация для остальных запросов
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter())));*/ // Настройка JWT аутентификации
 
-        return http.build();
+        //Spring Security
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)               // Отключаем CSRF для прототипов REST API
+                .cors(Customizer.withDefaults())                     // Включаем CORS
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login").permitAll()     // Доступ без аутентификации
+                        .requestMatchers("/register").permitAll()
+                        .anyRequest().authenticated()                // Требуется аутентификация для остальных запросов
+                )
+                .httpBasic(Customizer.withDefaults());
+
+        return httpSecurity.build();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 
     // Для информации: Если приложение не предоставляет компонент JwtDecoder,
@@ -50,9 +85,9 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));     // Разрешить запросы с порта 3000
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));      // Разрешить запросы с порта 3000
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));  // Разрешить методы
-        configuration.setAllowedHeaders(List.of("*"));                         // Разрешить любые заголовки
+        configuration.setAllowedHeaders(List.of("*"));                          // Разрешить любые заголовки
         configuration.setAllowCredentials(true);                                   // Разрешить отправку cookie
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -64,12 +99,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
-    }
-
-    // Определение PasswordEncoder для кодирования паролей
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     // Для получения имени аутентифицированного пользователя в аудиторе

@@ -9,7 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @PostMapping("/login")
-    public String userEndpoint() {
+    public String userLogin() {
+        return null;
+    }
+
+    @PostMapping("/register")
+    public String userRegister() {
         return null;
     }
 }

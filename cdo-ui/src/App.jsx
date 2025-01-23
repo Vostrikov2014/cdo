@@ -35,8 +35,12 @@ const App = () => {
 
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
-    const showLogo = location.pathname !== '/login';
-    const applyBackground = location.pathname === '/' || location.pathname === '/login' || location.pathname.startsWith('/conference');
+    const showLogo = location.pathname !== '/register' && location.pathname !== '/login';
+    const showLogIn = location.pathname !== '/login';
+    const applyBackground = location.pathname === '/'
+        || location.pathname === '/register'
+        || location.pathname === '/login'
+        || location.pathname.startsWith('/conference');
 
     return (
         <div>
@@ -58,7 +62,7 @@ const App = () => {
                                 <Logo disableLink={disableLogoLink}/>
                             </div>
                         )}
-                        {username === '' ? (
+                        {showLogIn && username === '' ? (
                             <div style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
                                 <Link to="/login"
                                       style={{
@@ -66,9 +70,9 @@ const App = () => {
                                           textDecoration: 'none',
                                           fontSize: '1.5rem',
                                           fontWeight: 'bold'
-                                      }}>Log in</Link>
+                                      }}>LOGIN</Link>
                             </div>
-                        ) : (
+                        ) : showLogIn && (
                             <h4 style={{
                                 color: '#e0956a',
                                 position: 'absolute',
@@ -82,6 +86,7 @@ const App = () => {
                         )}
                         <Routes>
                             <Route path="/" element={<Index/>}/>
+                            <Route path="/register" element={<Register/>}/>
                             <Route path="/login" element={<Login/>}/>
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
                         </Routes>
@@ -98,7 +103,6 @@ const App = () => {
                             )}
                             <Routes>
                                 <Route path="/under-construction" element={<UnderConstruction/>}/>
-                                <Route path="/register" element={<Register/>}/>
                                 <Route path="/home" element={<Home/>}/>
                                 <Route path="/create-conference" element={<ConfCreateUpdate/>}/>
                                 <Route path="/delete-conference" element={<ConfDelete/>}/>
@@ -115,9 +119,9 @@ const App = () => {
 
 const AppWrapper = () => (
     //<ReactKeycloakProvider authClient={keycloakConfig} initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
-        <BrowserRouter>
-            <App/>
-        </BrowserRouter>
+    <BrowserRouter>
+        <App/>
+    </BrowserRouter>
     //</ReactKeycloakProvider>
 );
 

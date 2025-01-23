@@ -8,7 +8,7 @@ const LoginPage = () => {
 
     const [username, setUsername] = useState('');
     const {keycloak, initialized} = useKeycloak();  //Используем хук useKeycloak для получения информации о Keycloak
-    const navigate = useNavigate(); // React Router hook for navigation
+    const navigate = useNavigate();                   // React RouterHook для навигации
 
     useEffect(() => {
         if (initialized && keycloak.authenticated) {

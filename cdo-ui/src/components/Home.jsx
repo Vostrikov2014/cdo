@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {BASE_URL} from "../config.js";
+import axiosInstance from "../axiosConfig.js";
 
 const Home = () => {
 
@@ -11,7 +12,7 @@ const Home = () => {
     useEffect(() => {
         const fetchConferences = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/conference/list`); // Adjust the URL as needed
+                const response = await axiosInstance().get(`${BASE_URL}/conference/list`); // Adjust the URL as needed
                 setConferences(response.data);
                 setLoading(false);
             } catch (err) {
