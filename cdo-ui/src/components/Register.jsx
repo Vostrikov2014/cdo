@@ -5,14 +5,20 @@ import {useNavigate} from "react-router-dom";
 
 const Register = () => {
 
-    const [username, setUsername] = useState(null);
-    const [password, setPassword] = useState(null);
-    const [email, setEmail] = useState(null);
-    const [firstname, setFirstname] = useState(null);
-    const [lastname, setLastname] = useState(null);
+    const [formData, setFormData] = useState({
+        username: null, password: null, firstname: null,
+        lastname: null, email: null
+    })
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
     const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,17 +27,17 @@ const Register = () => {
 
         try {
             const response = await axios.post(`${BASE_URL}/register`, {
-                userName: username,
-                password,
-                firstName: firstname,
-                lastName: lastname,
-                email,
+                userName: formData.username, password: formData.password,
+                firstName: formData.firstname, lastName: formData.lastname,
+                email: formData.email,
             });
 
             if (response.status === 200 || response.status === 201) {
                 setSuccess(true);
                 // Доп логика, например, редирект на страницу логина
-                navigate('/login');
+                navigate('/login')
+            } else {
+                setError(response.data.message);
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Ошибка регистрации');
@@ -51,39 +57,32 @@ const Register = () => {
             <form onSubmit={handleSubmit}>
                 <div className="form-group mb-3">
                     <label>User name:</label>
-                    <input type="text" className="form-control" placeholder="Enter your username"
-                           value={username}
-                           onChange={(e) => setUsername(e.target.value)}
-                           required
+                    <input type="text" className="form-control" placeholder="Enter your username *"
+                           name="username" value={formData.username} onChange={handleChange} required
                     />
                 </div>
                 <div className="form-group mb-3">
                     <label>Password:</label>
-                    <input type="password" className="form-control" placeholder="Enter your password"
-                           value={password}
-                           onChange={(e) => setPassword(e.target.value)}
-                           required
+                    <input type="password" className="form-control" placeholder="Enter your password *"
+                           name="password" value={formData.password} onChange={handleChange} required
                     />
                 </div>
                 <div className="form-group mb-3">
                     <label>First name:</label>
                     <input type="firstname" className="form-control" placeholder="Enter your firstname"
-                           value={firstname}
-                           onChange={(e) => setFirstname(e.target.value)}
+                           name="firstname" value={formData.firstname} onChange={handleChange}
                     />
                 </div>
                 <div className="form-group mb-3">
                     <label>Last name:</label>
                     <input type="lastname" className="form-control" placeholder="Enter your lastname"
-                           value={lastname}
-                           onChange={(e) => setLastname(e.target.value)}
+                           name="lastname" value={formData.lastname} onChange={handleChange}
                     />
                 </div>
                 <div className="form-group mb-3">
                     <label>Email:</label>
                     <input type="email" className="form-control" placeholder="Enter your lastname"
-                           value={email}
-                           onChange={(e) => setEmail(e.target.value)}
+                           name="email" value={formData.email} onChange={handleChange}
                     />
                 </div>
                 <button type="submit" className="btn btn-primary w-100" style={{backgroundColor: '#0f47ad'}}>Register
