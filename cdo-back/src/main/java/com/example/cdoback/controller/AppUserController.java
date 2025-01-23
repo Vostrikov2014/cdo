@@ -1,7 +1,9 @@
 package com.example.cdoback.controller;
 
 import com.example.cdoback.model.AppUser;
+import com.example.cdoback.model.LoginRequest;
 import com.example.cdoback.service.AppUserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,23 @@ public class AppUserController {
     public ResponseEntity<AppUser> newAppUser(@RequestBody() AppUser appUser) {
         AppUser newUser = appUserService.addAppUser(appUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    }
+
+    // Basic authenticated
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpSession session) {
+        try{
+           boolean isAuthenticated = appUserService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+           if (isAuthenticated) {
+               session.setAttribute("user", loginRequest.getUsername());
+               return ResponseEntity.status(HttpStatus.CREATED).body("Loin was successful!");
+           } else {
+               return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User name or Password is incorrect");
+           }
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+        }
     }
 
 

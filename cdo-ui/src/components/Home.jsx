@@ -6,24 +6,32 @@ import axiosInstance from "../axiosConfig.js";
 const Home = () => {
 
     const [conferences, setConferences] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        axiosInstance.get(`${BASE_URL}/conference/list`).then(response => {
+            setConferences(response.data)
+        }).catch((err) => {
+            console.log("There was an error fetching the products", err);
+            setError(err.response?.data?.message || ' Error fetching conferences');
+        })
+    }, []);
+
+    /*useEffect(() => {
         const fetchConferences = async () => {
             try {
-                const response = await axiosInstance().get(`${BASE_URL}/conference/list`); // Adjust the URL as needed
+                const response = await axiosInstance.get(`${BASE_URL}/conference/list`); // Adjust the URL as needed
                 setConferences(response.data);
                 setLoading(false);
             } catch (err) {
-                setError('Error fetching conferences');
-                setLoading(false);
+                setError(err.response?.data?.message || ' Error fetching conferences');
             }
         };
 
-        fetchConferences();
+        fetchConferences().catch(console.error); // Return the promise and handle any errors
 
-    }, []);
+    }, []);*/
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;

@@ -88,6 +88,7 @@ const App = () => {
                             <Route path="/" element={<Index/>}/>
                             <Route path="/register" element={<Register/>}/>
                             <Route path="/login" element={<Login/>}/>
+                            <Route path="/home" element={<Home/>}/>
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
                         </Routes>
                     </div>

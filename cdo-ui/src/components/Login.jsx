@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import {BASE_URL} from '../config';
+import {useNavigate} from "react-router-dom";
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
 //import keycloakConfig from "./KeycloakConfig.jsx";
@@ -10,6 +11,8 @@ const Login = () => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     // Используем хук useKeycloak для получения информации о Keycloak
     /*const { keycloak, initialized } = useKeycloak();
@@ -20,14 +23,33 @@ const Login = () => {
         }
     }, [initialized, keycloak]);*/
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        axios.post(`${BASE_URL}/auth/login`, {username, password})
+    const handleLogin = async (e) => {
+        e.preventDefault(); // Предотвратим отравку по умолчанию
+        setError('');
+        const loinData = {
+            username,
+            password
+        }
+
+        try {
+            const response = await axios.post(`${BASE_URL}/login`, loinData);
+            //console.log(response)
+            if (response.status === 200 || response.status === 201) {
+                navigate('/home')
+            } else {
+                const errorData = await response.json()
+                setError(errorData.message || "Loin faild for user. Please retry!");
+            }
+        } catch (error) {
+            setError("And error occured. pleas retry")
+        }
+
+        /*axios.post(`${BASE_URL}/login`, loinData)
             .then(() => window.location = '/home')
             .catch((err) => {
                 console.error(err);
                 alert("Invalid credentials / Недействительные учетные данные")
-            });
+            });*/
     };
 
     return (
