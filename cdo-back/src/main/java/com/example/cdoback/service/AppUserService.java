@@ -40,8 +40,8 @@ public class AppUserService {
     }
 
     public boolean authenticate(String username, String password) {
-        AppUser appUser = appUserRepository.findByUserName(username);
-        if (!appUser.getUserName().equals(username)) {
+        AppUser appUser = appUserRepository.findByUsername(username);
+        if (!appUser.getUsername().equals(username)) {
             throw new UsernameNotFoundException("User name or Password is incorrect");
         }
         /*if (appUser.getPasswordHash().equals(bCryptPasswordEncoder.encode(password))) {

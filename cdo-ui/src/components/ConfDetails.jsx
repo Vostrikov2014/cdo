@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {BASE_URL} from "../config.js";
+import axiosInstance from "../axiosConfig.js";
 
 const ConfDetails = ({ id }) => {
     const [conference, setConference] = useState(null);
@@ -8,7 +9,7 @@ const ConfDetails = ({ id }) => {
     useEffect(() => {
         const fetchConference = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/conference/${id}`);
+                const response = await axiosInstance.get(`${BASE_URL}/conference/${id}`);
                 setConference(response.data);
             } catch (error) {
                 console.error('Error fetching conference', error);

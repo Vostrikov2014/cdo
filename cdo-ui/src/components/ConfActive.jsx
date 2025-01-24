@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {BASE_URL} from "../config.js";
 import {Link} from 'react-router-dom';
+import axiosInstance from "../axiosConfig.js";
 
 const ConfActive = () => {
     const [conferences, setConferences] = useState([]);
@@ -12,7 +13,7 @@ const ConfActive = () => {
     useEffect(() => {
         const fetchConferences = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/conference/list`);
+                const response = await axiosInstance.get(`${BASE_URL}/conference/list`);
                 setConferences(response.data);
                 setLoading(false);
             } catch (err) {

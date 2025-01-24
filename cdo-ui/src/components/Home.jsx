@@ -10,11 +10,21 @@ const Home = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axiosInstance.get(`${BASE_URL}/conference/list`).then(response => {
+        axiosInstance.get(`${BASE_URL}/conferences`
+            /*, {
+            //headers: {
+            //    'Content-Type': 'application/json',
+            //    'Authorization': 'Bearer ' + localStorage.getItem('token')
+            auth: {
+                username: 'vd',
+                password: '111'
+            }
+        }*/
+        ).then(response => {
             setConferences(response.data)
-        }).catch((err) => {
-            console.log("There was an error fetching the products", err);
-            setError(err.response?.data?.message || ' Error fetching conferences');
+        }).catch((error) => {
+            console.log("There was an error fetching the Conference list", error);
+            setError("There was an error fetching the Conference list. " + error);
         })
     }, []);
 

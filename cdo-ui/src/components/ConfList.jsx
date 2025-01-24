@@ -3,29 +3,35 @@ import axios from 'axios';
 import {BASE_URL} from "../config.js";
 import {Link} from 'react-router-dom';
 import ConfDelete from './ConfDelete';
+import axiosInstance from "../axiosConfig.js";
 
 const ConfList = () => {
     const [conferences, setConferences] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('upcoming');
+
+
+    /*useEffect(() => {
+        axiosInstance.get(`${BASE_URL}/conferences`).then(response => {
+            setConferences(response.data)
+        }).catch((error) => {
+            setError("There was an error fetching the Conference list. " + error);
+        })
+    }, []);*/
 
     useEffect(() => {
         const fetchConferences = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/conference/list`);
+                const response = await axiosInstance.get(`${BASE_URL}/conferences`);
                 setConferences(response.data);
-                setLoading(false);
-            } catch (err) {
-                setError('Error fetching conferences');
-                setLoading(false);
+            } catch (error) {
+                setError("'There was an error fetching the Conference list. " + error);
             }
         };
 
         fetchConferences();
     }, []);
 
-    if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
     const now = new Date();
@@ -35,7 +41,7 @@ const ConfList = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Вы уверены, что хотите удалить эту конференцию?')) {
             try {
-                await axios.delete(`${BASE_URL}/conference/${id}`);
+                await axiosInstance.delete(`${BASE_URL}/conference/${id}`);
                 setConferences(conferences.filter(conference => conference.id !== id)); // Обновляем список конференций
                 console.log(`Конференция с id: ${id} удалена`);
             } catch (error) {

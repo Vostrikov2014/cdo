@@ -15,11 +15,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final AppUserRepository appUserRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        AppUser appUser = appUserRepository.findByUserName(userName);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser appUser = appUserRepository.findByUsername(username);
 
         if (appUser == null) {
-            throw new UsernameNotFoundException("Пользователь " + userName + " не найден.");
+            throw new UsernameNotFoundException("Пользователь " + username + " не найден.");
         }
 
         return new UserPrincipal(appUser);

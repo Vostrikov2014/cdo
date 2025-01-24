@@ -5,8 +5,16 @@ import {useKeycloak} from "@react-keycloak/web";
 const Layout = ({children}) => {
     const location = useLocation(); // Получаем текущее местоположение
     const [username, setUsername] = useState('Unknown');
-    //const {keycloak, initialized} = useKeycloak();
 
+    const user = JSON.parse(window.localStorage.getItem('user'));
+    if (user) {
+        console.log(user);
+        setUsername(user);
+    } else {
+        console.log('User not found in local storage');
+    }
+
+    //const {keycloak, initialized} = useKeycloak();
     /*useEffect(() => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username || 'Unknown');

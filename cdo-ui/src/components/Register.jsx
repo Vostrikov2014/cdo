@@ -23,11 +23,12 @@ const Register = () => {
         setSuccess(false);
 
         try {
-            const response = await axios.post(`${BASE_URL}/register`, {
+            const response = await axios.post(`${BASE_URL}/register`, formData);
+            /*const response = await axios.post(`${BASE_URL}/register`, {
                 userName: formData.username, password: formData.password,
                 firstName: formData.firstname, lastName: formData.lastname,
                 email: formData.email,
-            });
+            });*/
 
             if (response.status === 200 || response.status === 201) {
                 setSuccess(true);

@@ -22,15 +22,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/conference")
 public class ConferenceController {
 
     private final ConferenceService conferenceService;
     private final AuditorAware<String> auditorAware; // пример - это можно удалить
     private final HttpSession session;
 
-    @GetMapping("/list")
-    public ResponseEntity<List<Conference>> listConferences(@AuthenticationPrincipal UserDetails userDetails) {
+    @GetMapping("/conferences")
+    public ResponseEntity<List<Conference>> getConferences(@AuthenticationPrincipal UserDetails userDetails) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -47,14 +46,14 @@ public class ConferenceController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/conference/{id}")
     public ResponseEntity<Conference> getConference(@PathVariable Long id) {
         Optional<Conference> conference = conferenceService.getConference(id);
         return conference.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
+    @PostMapping("/conferences")
     public ResponseEntity<Conference> createConference(@RequestBody Conference conference,
                                                        @CurrentSecurityContext(expression = "authentication") Authentication authentication,
                                                        @AuthenticationPrincipal UserDetails userDetails) {
@@ -67,14 +66,14 @@ public class ConferenceController {
         return ResponseEntity.ok(createdConference);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/conferences")
     public ResponseEntity<Conference> updateConference(@RequestBody Conference conference,
                                                        @AuthenticationPrincipal UserDetails userDetails) {
         Conference savedConference = conferenceService.updateConference(conference);
         return ResponseEntity.ok(savedConference);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("conference/{id}")
     public ResponseEntity<Void> deleteConference(@PathVariable Long id) {
         conferenceService.deleteConference(id);
         return ResponseEntity.noContent().build();
