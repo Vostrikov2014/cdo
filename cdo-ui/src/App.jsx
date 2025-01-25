@@ -15,9 +15,9 @@ import ConfActive from "./components/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
 
-import {ReactKeycloakProvider} from "@react-keycloak/web";
-import keycloakConfig from "./components/KeycloakConfig.jsx"
-import {useKeycloak} from '@react-keycloak/web';
+//import {ReactKeycloakProvider} from "@react-keycloak/web";
+//import keycloakConfig from "./components/KeycloakConfig.jsx"
+//import {useKeycloak} from '@react-keycloak/web';
 
 // Основной компонент приложения
 const App = () => {

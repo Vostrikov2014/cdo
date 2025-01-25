@@ -1,21 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import {ReactKeycloakProvider} from "@react-keycloak/web";
-import keycloakConfig from "./KeycloakConfig.jsx"
-import {useKeycloak} from '@react-keycloak/web';
-import {useNavigate} from 'react-router-dom';
+//import {ReactKeycloakProvider} from "@react-keycloak/web";
+//import keycloakConfig from "./KeycloakConfig.jsx"
+//import {useKeycloak} from '@react-keycloak/web';
+//import {useNavigate} from 'react-router-dom';
 
 const LoginPage = () => {
 
     const [username, setUsername] = useState('');
-    const {keycloak, initialized} = useKeycloak();  //Используем хук useKeycloak для получения информации о Keycloak
-    const navigate = useNavigate();                   // React RouterHook для навигации
+    //const {keycloak, initialized} = useKeycloak();  //Используем хук useKeycloak для получения информации о Keycloak
+    //const navigate = useNavigate();                   // React RouterHook для навигации
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username || 'Unknown');
             navigate('/home');   // Redirect to HomePage when authenticated
         }
-    }, [initialized, keycloak, navigate]);
+    }, [initialized, keycloak, navigate]);*/
 
     // Логируем значения для отладки
     useEffect(() => {
@@ -31,10 +31,10 @@ const LoginPage = () => {
 };
 
 const LoginPageWrapper = () => (
-    <ReactKeycloakProvider authClient={keycloakConfig}
-                           initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
+    //<ReactKeycloakProvider authClient={keycloakConfig}
+                           //initOptions={{onLoad: 'login-required', checkLoginIframe: false}}>
         <LoginPage/>
-    </ReactKeycloakProvider>
+    //</ReactKeycloakProvider>
 );
 
 export default LoginPageWrapper;
