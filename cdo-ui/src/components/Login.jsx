@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {BASE_URL} from '../config';
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
 //import keycloakConfig from "./KeycloakConfig.jsx";
@@ -95,6 +95,22 @@ const Login = () => {
             </form>
             <div className="mt-3 text-center">
                 <p>Don't have an account? <a href="/register" className="btn btn-link">Register</a></p>
+            </div>
+
+            {/* Ссылка CDO в верхнем правом углу */}
+            <div style={{
+                position: 'fixed', // Фиксированное позиционирование
+                top: '35px',
+                right: '50px',
+                zIndex: 1000 // Увеличиваем z-index для перекрытия других элементов
+            }}>
+                <Link to="/"
+                      style={{
+                          color: 'white',
+                          textDecoration: 'none',
+                          fontSize: '1.5rem',
+                          fontWeight: 'bold'
+                      }}>CDO</Link>
             </div>
         </div>
     );

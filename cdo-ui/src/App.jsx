@@ -14,6 +14,9 @@ import Layout from './components/Layout.jsx';
 import ConfActive from "./components/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/ConfDelete.jsx";
+import Cookies from "js-cookie";
+import axiosInstance from "./axiosConfig.js";
+import {BASE_URL} from "./config.js";
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
 //import keycloakConfig from "./components/KeycloakConfig.jsx"
@@ -22,7 +25,7 @@ import ConfDelete from "./components/ConfDelete.jsx";
 // Основной компонент приложения
 const App = () => {
     const location = useLocation();
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState(null);
 
     // Используем хук useKeycloak для получения информации о Keycloak
     //const { keycloak, initialized } = useKeycloak();
@@ -32,6 +35,25 @@ const App = () => {
             setUsername(keycloak.tokenParsed?.preferred_username || "Гость");
         }
     }, [initialized, keycloak]);*/
+
+    useEffect(() => {
+        const sessionId = Cookies.get('JSESSIONID'); // Получаем идентификатор сессии из cookie
+        if (sessionId) {
+            // Отправляем запрос к серверу для получения имени пользователя из сессии
+            axiosInstance.get(`${BASE_URL}/username`, {
+                withCredentials: true // Включаем cookie в запросе
+            })
+                .then(response => {
+                    setUsername(response.data); // Устанавливаем имя пользователя
+                })
+                .catch((error) => {
+                    console.log("User Unknown", error);
+                    setUsername('Unknown'); // Если запрос не удался
+                });
+        } else {
+            setUsername(null);
+        }
+    }, []);
 
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
@@ -62,7 +84,7 @@ const App = () => {
                                 <Logo disableLink={disableLogoLink}/>
                             </div>
                         )}
-                        {showLogIn && username === '' ? (
+                        {showLogIn && username === null ? (
                             <div style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
                                 <Link to="/login"
                                       style={{
@@ -73,16 +95,16 @@ const App = () => {
                                       }}>LOGIN</Link>
                             </div>
                         ) : showLogIn && (
-                            <h4 style={{
-                                color: '#e0956a',
-                                position: 'absolute',
-                                top: '35px',
-                                right: '50px',
-                                fontWeight: 'bold',
-                                zIndex: 9999
-                            }}>
-                                Welcome, {username}
-                            </h4>
+                            <div
+                                style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
+                                <Link to="/home"
+                                      style={{
+                                          color: 'white',
+                                          textDecoration: 'none',
+                                          fontSize: '1.5rem',
+                                          fontWeight: 'bold'
+                                      }}>{username}</Link>
+                            </div>
                         )}
                         <Routes>
                             <Route path="/" element={<Index/>}/>

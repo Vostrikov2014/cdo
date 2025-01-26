@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import {BASE_URL} from "../config.js";
 import axiosInstance from "../axiosConfig.js";
@@ -8,7 +8,8 @@ import axios from "axios";
 
 const Layout = ({children}) => {
     const location = useLocation(); // Получаем текущее местоположение
-    const [username, setUsername] = useState('Unknown');
+    const [username, setUsername] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const sessionId = Cookies.get('JSESSIONID'); // Получаем идентификатор сессии из cookie
@@ -27,6 +28,15 @@ const Layout = ({children}) => {
         }
     }, []);
 
+    const handleLogout = () => {
+        // Удаление куки
+        Cookies.remove('JSESSIONID');
+        // Очищение username
+        setUsername('Unknown');
+        // Перенаправление на страницу входа
+        navigate('/login');
+    };
+
     //const {keycloak, initialized} = useKeycloak();
     /*useEffect(() => {
         if (initialized && keycloak.authenticated) {
@@ -41,13 +51,25 @@ const Layout = ({children}) => {
                 <h6>Это информационная строка.</h6>
             </div>
 
-            {/* Панель управления */}
+            {/* Панель управления
             <header className="bg-light text-dark p-2 w-100 d-flex justify-content-end"
                     style={{height: '10vh', width: '100vw'}}>
                 {username && (
                     <h5>{username}</h5>
                 )}
+            </header>*/}
+
+            {/* Панель управления */}
+            <header className="bg-light text-dark p-2 w-100 d-flex justify-content-end align-items-center"
+                    style={{ height: '10vh', width: '100vw' }}>
+                <div style={{ marginRight: '15px' }}>
+                    {username && <h5>{username}</h5>}
+                </div>
+                <button onClick={handleLogout} className="btn btn-danger">
+                    Выйти
+                </button>
             </header>
+
 
             <div className="d-flex flex-grow-1">
                 {/* Боковое меню */}
