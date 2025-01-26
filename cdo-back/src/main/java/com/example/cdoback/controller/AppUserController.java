@@ -45,6 +45,8 @@ public class AppUserController {
            boolean isAuthenticated = appUserService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
            if (isAuthenticated) {
                session.setAttribute("user", loginRequest.getUsername());
+               System.out.println("Session ID: " + session.getId());
+               System.out.println("Username: " + session.getAttribute("user"));
                return ResponseEntity.status(HttpStatus.CREATED).body("Loin was successful!");
            } else {
                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User name or Password is incorrect");
@@ -53,6 +55,16 @@ public class AppUserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
         }
+    }
+
+    @GetMapping("/username")
+    public ResponseEntity<String> getUsernameFromSession(HttpSession session) {
+        Object username = session.getAttribute("user");
+        if (username != null) {
+            return ResponseEntity.ok(appUserService.getAppUserByUsername(username.toString()).getFirstname()
+            + " " + appUserService.getAppUserByUsername(username.toString()).getLastname());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No user logged in.");
     }
 
 

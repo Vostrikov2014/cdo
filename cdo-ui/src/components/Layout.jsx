@@ -1,18 +1,31 @@
 import React, {useState, useEffect} from 'react';
 import {Link, useLocation} from 'react-router-dom';
-import {useKeycloak} from "@react-keycloak/web";
+import Cookies from 'js-cookie';
+import {BASE_URL} from "../config.js";
+import axiosInstance from "../axiosConfig.js";
+import axios from "axios";
+//import {useKeycloak} from "@react-keycloak/web";
 
 const Layout = ({children}) => {
     const location = useLocation(); // Получаем текущее местоположение
     const [username, setUsername] = useState('Unknown');
 
-    const user = JSON.parse(window.localStorage.getItem('user'));
-    if (user) {
-        console.log(user);
-        setUsername(user);
-    } else {
-        console.log('User not found in local storage');
-    }
+    useEffect(() => {
+        const sessionId = Cookies.get('JSESSIONID'); // Получаем идентификатор сессии из cookie
+        if (sessionId) {
+            // Отправляем запрос к серверу для получения имени пользователя из сессии
+            axiosInstance.get(`${BASE_URL}/username`, {
+                withCredentials: true // Включаем cookie в запросе
+            })
+                .then(response => {
+                    setUsername(response.data); // Устанавливаем имя пользователя
+                })
+                .catch((error) => {
+                    console.log("User Unknown", error);
+                    setUsername('Unknown'); // Если запрос не удался
+                });
+        }
+    }, []);
 
     //const {keycloak, initialized} = useKeycloak();
     /*useEffect(() => {
@@ -32,7 +45,7 @@ const Layout = ({children}) => {
             <header className="bg-light text-dark p-2 w-100 d-flex justify-content-end"
                     style={{height: '10vh', width: '100vw'}}>
                 {username && (
-                    <h5>Welcome, {username}!</h5>
+                    <h5>{username}</h5>
                 )}
             </header>
 

@@ -8,7 +8,7 @@ import axiosInstance from "../axiosConfig.js";
 const ConfList = () => {
     const [conferences, setConferences] = useState([]);
     const [error, setError] = useState(null);
-    const [activeTab, setActiveTab] = useState('upcoming');
+    const [activeTab, setActiveTab] = useState('all');
 
 
     /*useEffect(() => {
@@ -35,6 +35,7 @@ const ConfList = () => {
     if (error) return <div>{error}</div>;
 
     const now = new Date();
+    const allConferences = conferences;
     const upcomingConferences = conferences.filter(conference => new Date(conference.startTime) > now);
     const pastConferences = conferences.filter(conference => new Date(conference.startTime) <= now);
 
@@ -60,6 +61,12 @@ const ConfList = () => {
 
                 <div className="d-flex justify-content mb-4">
                     <button
+                        className={`btn btn-link ${activeTab === 'all' ? 'text-primary' : ''}`}
+                        onClick={() => setActiveTab('all')}
+                    >
+                        Все
+                    </button>
+                    <button
                         className={`btn btn-link ${activeTab === 'upcoming' ? 'text-primary' : ''}`}
                         onClick={() => setActiveTab('upcoming')}
                     >
@@ -73,12 +80,56 @@ const ConfList = () => {
                     </button>
                 </div>
 
+                {activeTab === 'all' && (
+                    allConferences.length > 0 ? (
+                        <table className="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Conference Name</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {allConferences.map((conference) => (
+                                <tr key={conference.id}>
+                                    <td>{conference.conferenceName}</td>
+                                    <td>{new Date(conference.startTime).toLocaleString()}</td>
+                                    <td>{new Date(conference.endTime).toLocaleString()}</td>
+                                    <td>
+                                        <a href={`/conference/${conference.id}`} className="btn btn-primary me-2"
+                                           style={{backgroundColor: '#0f47ad'}}>
+                                            Начать
+                                        </a>
+                                        <Link
+                                            to="/create-conference"
+                                            state={{conferenceData: conference}} // передаем данные конференции
+                                            className="btn btn-secondary me-2"
+                                        >
+                                            Редактировать
+                                        </Link>
+                                        <button onClick={() => handleDelete(conference.id)} className="btn btn-danger">
+                                            Удалить
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <div className="text-center">
+                            <h5>No upcoming conferences found.</h5>
+                        </div>
+                    )
+                )}
+
                 {activeTab === 'upcoming' && (
                     upcomingConferences.length > 0 ? (
                         <table className="table table-striped">
                             <thead>
                             <tr>
-                                <th>Conference Name</th>
+                            <th>Conference Name</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
                                 <th>Actions</th>

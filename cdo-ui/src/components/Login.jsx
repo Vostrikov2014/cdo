@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import {BASE_URL} from '../config';
 import {useNavigate} from "react-router-dom";
 
@@ -23,6 +24,14 @@ const Login = () => {
         }
     }, [initialized, keycloak]);*/
 
+    // Проверка сессии при загрузке компонента
+    useEffect(() => {
+        const sessionId = Cookies.get('JSESSIONID'); // Проверяем наличие сессии в куках
+        if (sessionId) {
+            navigate('/home'); // Если сессия есть, переходим на страницу home
+        }
+    }, [navigate]);
+
     const handleLogin = async (e) => {
         e.preventDefault(); // Предотвратим отравку по умолчанию
         setError('');
@@ -32,7 +41,10 @@ const Login = () => {
         }
 
         try {
-            const response = await axios.post(`${BASE_URL}/login`, loinData);
+            const response = await axios.post(`${BASE_URL}/login`,
+                loinData, {
+                withCredentials: true // Включает cookie
+            });
             //console.log(response)
             if (response.status === 200 || response.status === 201) {
                 navigate('/home')

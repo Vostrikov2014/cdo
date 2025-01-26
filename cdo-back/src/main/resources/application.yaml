@@ -4,8 +4,9 @@ server:
     session:
       timeout: 2000m   # Срок жизни сессии — 2000 минут
       cookie:
+        http-only: false
         secure: false  # Разрешить отправку cookie через HTTP
-
+        same-site: Lax
 spring:
   application:
     name: cdo-back

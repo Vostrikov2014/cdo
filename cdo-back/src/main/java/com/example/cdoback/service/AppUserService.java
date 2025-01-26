@@ -25,6 +25,10 @@ public class AppUserService {
         return appUserRepository.findById(id).orElse(null);
     }
 
+    public AppUser getAppUserByUsername(String username) {
+        return appUserRepository.findByUsername(username);
+    }
+
     public AppUser addAppUser(AppUser appUser) {
         appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser);
