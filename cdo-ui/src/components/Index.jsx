@@ -9,7 +9,7 @@ const Index = () => {
             <div className="text-center" style={{marginTop: '-170px'}}>
                 <h1 className="mb-5"
                     style={{
-                        //fontWeight: 'bold',
+                        fontWeight: 'bold',
                         fontSize: '3.5rem',
                         color: 'white'
                     }}>ЦЕНТР ДИСТАНЦИОННОГО ОБУЧЕНИЯ МГУ</h1>
@@ -19,7 +19,9 @@ const Index = () => {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: '20vh',
+                height: '15vh',
+                flexWrap: 'wrap',
+                gap: '15px'
             }}>
 
                 <div className="card p-4 shadow"
@@ -67,6 +69,8 @@ const Index = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 height: '10vh',
+                flexWrap: 'wrap',
+                gap: '15px'
             }}>
                 <div className="card p-4 shadow"
                      style={{

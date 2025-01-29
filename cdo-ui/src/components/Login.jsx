@@ -28,26 +28,26 @@ const Login = () => {
     useEffect(() => {
         const sessionId = Cookies.get('JSESSIONID'); // Проверяем наличие сессии в куках
         if (sessionId) {
-            navigate('/home'); // Если сессия есть, переходим на страницу home
+            navigate('/home-video-conf'); // Если сессия есть, переходим на страницу home
         }
     }, [navigate]);
 
     const handleLogin = async (e) => {
         e.preventDefault(); // Предотвратим отравку по умолчанию
         setError('');
-        const loinData = {
+        const loginData = {
             username,
             password
         }
 
         try {
             const response = await axios.post(`${BASE_URL}/login`,
-                loinData, {
+                loginData, {
                 withCredentials: true // Включает cookie
             });
             //console.log(response)
             if (response.status === 200 || response.status === 201) {
-                navigate('/home')
+                navigate('/home-video-conf')
             } else {
                 const errorData = await response.json()
                 setError(errorData.message || "Loin faild for user. Please retry!");
@@ -57,7 +57,7 @@ const Login = () => {
         }
 
         /*axios.post(`${BASE_URL}/login`, loinData)
-            .then(() => window.location = '/home')
+            .then(() => window.location = '/home-video-conf')
             .catch((err) => {
                 console.error(err);
                 alert("Invalid credentials / Недействительные учетные данные")

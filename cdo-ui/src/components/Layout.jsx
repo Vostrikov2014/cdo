@@ -76,8 +76,8 @@ const Layout = ({children}) => {
                     <ul className="nav flex-column">
                         <li className="nav-item">
                             <Link
-                                className={`nav-link ${location.pathname === '/home' ? 'text-white bg-primary' : 'text-dark'}`}
-                                to="/home">
+                                className={`nav-link ${location.pathname === '/home-video-conf' ? 'text-white bg-primary' : 'text-dark'}`}
+                                to="/home-video-conf">
                                 Главная страница
                             </Link>
                         </li>

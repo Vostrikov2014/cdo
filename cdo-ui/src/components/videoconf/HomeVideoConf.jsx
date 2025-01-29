@@ -10,7 +10,8 @@ const HomeVideoConf = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axiosInstance.get(`${BASE_URL}/conferences`
+        axios.get(`${BASE_URL}/conferences`, { withCredentials: true }
+        //axiosInstance.get(`${BASE_URL}/conferences`
             /*, {
             //headers: {
             //    'Content-Type': 'application/json',
@@ -23,8 +24,8 @@ const HomeVideoConf = () => {
         ).then(response => {
             setConferences(response.data)
         }).catch((error) => {
-            console.log("There was an error fetching the Conference list", error);
-            setError("There was an error fetching the Conference list. " + error);
+            console.log("Получение листа конференций из HomeVideoConf", error);
+            setError("Получение листа конференций из HomeVideoConf " + error);
         })
     }, []);
 

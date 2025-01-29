@@ -13,7 +13,7 @@ const LoginPage = () => {
     /*useEffect(() => {
         if (initialized && keycloak.authenticated) {
             setUsername(keycloak.tokenParsed?.preferred_username || 'Unknown');
-            navigate('/home');   // Redirect to HomePage when authenticated
+            navigate('/home-video-conf');   // Redirect to HomePage when authenticated
         }
     }, [initialized, keycloak, navigate]);*/
 

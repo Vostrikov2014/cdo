@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,14 +54,21 @@ public class SecurityConfig {
 
         //Spring Security
         httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)               // Отключаем CSRF для прототипов REST API
-                .cors(Customizer.withDefaults())                     // Включаем CORS
+                .csrf(AbstractHttpConfigurer::disable)                             // Отключаем CSRF для прототипов REST API
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включаем CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()     // Доступ без аутентификации
-                        .requestMatchers("/register").permitAll()
-                        .anyRequest().authenticated()                // Требуется аутентификация для остальных запросов
+                        .requestMatchers("/login", "/register").permitAll()    // Доступ без аутентификации
+                        .anyRequest().authenticated()                              // Требуется аутентификация для остальных запросов
                 )
-                .httpBasic(Customizer.withDefaults());
+                //.httpBasic(Customizer.withDefaults()) // Это использует стандартные настройки CORS
+                /*.formLogin(login -> login
+                        .loginPage("/login")             // Страница входа
+                        .permitAll()
+                )*/
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Требуем сессию
+                        .maximumSessions(1)                                        // Максимальное количество сессий
+                );
 
         return httpSecurity.build();
     }
@@ -90,7 +98,7 @@ public class SecurityConfig {
         configuration.setAllowCredentials(true);                                   // Разрешить отправку cookie
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);            // Применение ко всем маршрутам
+        source.registerCorsConfiguration("/**", configuration);             // Применение ко всем маршрутам
         return source;
     }
 

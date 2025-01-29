@@ -25,7 +25,7 @@ const ConfList = () => {
                 const response = await axiosInstance.get(`${BASE_URL}/conferences`);
                 setConferences(response.data);
             } catch (error) {
-                setError("'There was an error fetching the Conference list. " + error);
+                setError("There was an error fetching the Conference list. " + error);
             }
         };
 

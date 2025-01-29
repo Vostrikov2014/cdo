@@ -14,10 +14,11 @@ import Layout from './components/Layout.jsx';
 import ConfActive from "./components/videoconf/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
 import ConfDelete from "./components/videoconf/ConfDelete.jsx";
+import IndexVideoConf from "./components/videoconf/IndexVideoConf.jsx";
 import Cookies from "js-cookie";
 import axiosInstance from "./axiosConfig.js";
 import {BASE_URL} from "./config.js";
-import IndexVideoConf from "./components/videoconf/IndexVideoConf.jsx";
+
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
 //import keycloakConfig from "./components/KeycloakConfig.jsx"
@@ -59,8 +60,9 @@ const App = () => {
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';
     const showLogo = location.pathname !== '/register' && location.pathname !== '/login';
-    const showLogIn = location.pathname !== '/login';
+    const showLogIn = location.pathname !== '/' && location.pathname !== '/login';
     const applyBackground = location.pathname === '/'
+        || location.pathname === '/index-video-conf'
         || location.pathname === '/register'
         || location.pathname === '/login'
         || location.pathname.startsWith('/conference');
@@ -98,7 +100,7 @@ const App = () => {
                         ) : showLogIn && (
                             <div
                                 style={{position: 'absolute', top: '35px', right: '50px'}}> {/* Позиционируем ссылку */}
-                                <Link to="/home"
+                                <Link to="/home-video-conf"
                                       style={{
                                           color: 'white',
                                           textDecoration: 'none',
