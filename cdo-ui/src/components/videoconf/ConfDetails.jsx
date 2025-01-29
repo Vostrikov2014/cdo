@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import {BASE_URL} from "../config.js";
-import axiosInstance from "../axiosConfig.js";
+import {BASE_URL} from "../../config.js";
+import axiosInstance from "../../axiosConfig.js";
 
 const ConfDetails = ({ id }) => {
     const [conference, setConference] = useState(null);

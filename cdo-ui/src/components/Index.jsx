@@ -1,76 +1,111 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import {Link} from 'react-router-dom';
 
 const Index = () => {
 
-    const [conferenceId, setConferenceId] = useState(''); // Состояние для хранения ID конференции
-
-    const handleStartConference = () => {
-        // Логика для запуска конференции
-        if (conferenceId) {
-            console.log(`Starting conference with ID: ${conferenceId}`);
-            // Здесь можно добавить логику для перехода на страницу конференции
-            // Например, можно использовать navigate для перехода на страницу конференции
-            // navigate(`/conference/${conferenceId}`);
-        }
-    };
-
     return (
-        <div
-            style={{
-                //position: 'relative',         // Устанавливаем относительное позиционирование для корневого контейнера
-                height: '100vh',              // Полная высота экрана
-                display: 'flex',              // Используем Flexbox
-                flexDirection: 'column',      // Вертикальное расположение элементов
-                justifyContent: 'flex-start', // Выравнивание по верхнему краю
-                alignItems: 'center',         // Центрирование по горизонтали
-                color: 'white',               // Цвет текста
-                padding: '145px',             // Отступы для контейнера
-            }}
-        >
-            <div className="text-center">
-                <h1 className="mb-2" style={{fontWeight: 'bold', fontSize: '3.5rem'}}>CDO:ONLINE</h1>
-                <h5 className="mb-0" style={{fontWeight: 'bold'}}>
-                    Distance learning linter SPA Lomonosov Moscow State University
-                </h5>
-            </div>
-            {/* Контейнер для input и кнопки */}
-            <div
-                style={{
-                    position: 'relative',      // Позиционирование для кнопки внутри контейнера
-                    marginTop: '10px'          // Отступ сверху для визуального разделения
-                }}>
-                <input
-                    type = "text"
-                    placeholder = "ConfStart ID"
-                    className = "form-control mb-3"
-                    style = {{ width: '470px', height: '65px', paddingRight: '70px' }} // Отступ для кнопки
-                    value = {conferenceId} // Устанавливаем значение из состояния
-                    onChange = {(e) => setConferenceId(e.target.value)} // Обновляем состояние при изменении
-                />
-                <button
-                    onClick={handleStartConference}
-                    className="btn btn-danger"  // Класс Bootstrap для кнопки
-                    style={{
-                        position: 'absolute',
-                        right: '5px',
-                        top: '39%',
-                        transform: 'translateY(-50%)',
-                        display: 'flex',          // Используем flexbox для центровки
-                        justifyContent: 'center', // Центрируем по горизонтали
-                        alignItems: 'center',     // Центрируем по вертикали
-                        backgroundColor: 'red',   // Красный цвет для кнопки
-                        width: '50px',
-                        height: '55px',
-                        fontSize: '2rem',    // Размер шрифта
-                        border: 'none',      // Убираем рамку
-                        padding: '0',        // Убираем отступы
-                        borderRadius: '5px', // Закругленные углы
-                        cursor: 'pointer',   // Курсор в виде указателя
+        <div>
 
-                    }}>
-                    &#9675;
-                </button>
+            <div className="text-center" style={{marginTop: '-170px'}}>
+                <h1 className="mb-5"
+                    style={{
+                        //fontWeight: 'bold',
+                        fontSize: '3.5rem',
+                        color: 'white'
+                    }}>ЦЕНТР ДИСТАНЦИОННОГО ОБУЧЕНИЯ МГУ</h1>
+            </div>
+
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '20vh',
+            }}>
+
+                <div className="card p-4 shadow"
+                     style={{
+                         width: '350px',
+                         height: '111px',
+                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                         border: '1px solid rgba(0, 0, 0, 0.1)',
+                         marginBottom: '15px',
+                     }}>
+                    <div className="d-flex align-items-center mb-3">
+                        <img src="/images/logocdo.svg" alt="Logo" style={{width: '65px'}}/>
+                        <div className="col ps-3">
+                            <Link to="/index-video-conf"
+                                  className="btn btn-link d-block"
+                                  style={{
+                                      fontWeight: 'bold',
+                                      textDecoration: 'none',
+                                      position: 'relative',
+                                      display: 'inline-block',
+                                      fontSize: '18px',
+                                      padding: '0px',
+                                      textAlign: 'left',
+                                      width: 'max-content',
+                                      borderRadius: 0
+                                  }}
+                                  onMouseEnter={(e) => {
+                                      e.target.style.borderBottom = '2px solid #000';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                      e.target.style.borderBottom = 'none';
+                                  }}>
+                                ВИДЕОКОНФЕРЕНЦИИ
+                            </Link>
+                            <div className="box-content">
+                                <p className="mb-0">Ссылки на преподавателей</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '10vh',
+            }}>
+                <div className="card p-4 shadow"
+                     style={{
+                         width: '350px',
+                         height: '111px',
+                         backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                         border: '1px solid rgba(0, 0, 0, 0.1)',
+                         marginBottom: '20px',
+                     }}>
+                    <div className="d-flex align-items-center mb-3">
+                        <img src="/images/logocdo.svg" alt="Logo" style={{width: '65px'}}/>
+                        <div className="col ps-3">
+                            <Link to="/under-construction"
+                                  className="btn btn-link d-block"
+                                  style={{
+                                      fontWeight: 'bold',
+                                      textDecoration: 'none',
+                                      position: 'relative',
+                                      display: 'inline-block',
+                                      fontSize: '18px',
+                                      padding: '0px',
+                                      textAlign: 'left',
+                                      width: 'max-content',
+                                      borderRadius: 0
+                                  }}
+                                  onMouseEnter={(e) => {
+                                      e.target.style.borderBottom = '2px solid #000';
+                                  }}
+                                  onMouseLeave={(e) => {
+                                      e.target.style.borderBottom = 'none';
+                                  }}>
+                                РАСПИСАНИЕ
+                            </Link>
+                            <div className="box-content">
+                                <p className="mb-0">Расписание онлайн</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

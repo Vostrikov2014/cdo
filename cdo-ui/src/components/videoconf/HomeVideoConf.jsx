@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {BASE_URL} from "../config.js";
-import axiosInstance from "../axiosConfig.js";
+import {BASE_URL} from "../../config.js";
+import axiosInstance from "../../axiosConfig.js";
 
-const Home = () => {
+const HomeVideoConf = () => {
 
     const [conferences, setConferences] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -96,4 +96,4 @@ const Home = () => {
     )
 };
 
-export default Home;
+export default HomeVideoConf;

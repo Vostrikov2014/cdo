@@ -2,21 +2,22 @@ import React, {useState, useEffect} from 'react';
 import {BrowserRouter, Link, Route, Routes, useLocation} from 'react-router-dom';
 import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
-import Home from './components/Home.jsx';
+import HomeVideoConf from './components/videoconf/HomeVideoConf.jsx';
 import Login from './components/Login.jsx';
 import LoginPage from './components/LoginPage.jsx';
 import Register from './components/Register.jsx';
-import ConfStart from "./components/ConfStart.jsx";
-import ConfCreateUpdate from "./components/ConfCreateUpdate.jsx";
-import ConfList from "./components/ConfList.jsx";
-import ConfDetails from "./components/ConfDetails.jsx";
+import ConfStart from "./components/videoconf/ConfStart.jsx";
+import ConfCreateUpdate from "./components/videoconf/ConfCreateUpdate.jsx";
+import ConfList from "./components/videoconf/ConfList.jsx";
+import ConfDetails from "./components/videoconf/ConfDetails.jsx";
 import Layout from './components/Layout.jsx';
-import ConfActive from "./components/ConfActive.jsx";
+import ConfActive from "./components/videoconf/ConfActive.jsx";
 import UnderConstruction from "./components/UnderConstruction.jsx";
-import ConfDelete from "./components/ConfDelete.jsx";
+import ConfDelete from "./components/videoconf/ConfDelete.jsx";
 import Cookies from "js-cookie";
 import axiosInstance from "./axiosConfig.js";
 import {BASE_URL} from "./config.js";
+import IndexVideoConf from "./components/videoconf/IndexVideoConf.jsx";
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
 //import keycloakConfig from "./components/KeycloakConfig.jsx"
@@ -108,9 +109,10 @@ const App = () => {
                         )}
                         <Routes>
                             <Route path="/" element={<Index/>}/>
+                            <Route path="/index-video-conf" element={<IndexVideoConf/>}/>
                             <Route path="/register" element={<Register/>}/>
                             <Route path="/login" element={<Login/>}/>
-                            <Route path="/home" element={<Home/>}/>
+                            <Route path="/home-video-conf" element={<HomeVideoConf/>}/>
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
                         </Routes>
                     </div>
@@ -126,7 +128,7 @@ const App = () => {
                             )}
                             <Routes>
                                 <Route path="/under-construction" element={<UnderConstruction/>}/>
-                                <Route path="/home" element={<Home/>}/>
+                                <Route path="/home-video-conf" element={<HomeVideoConf/>}/>
                                 <Route path="/create-conference" element={<ConfCreateUpdate/>}/>
                                 <Route path="/delete-conference" element={<ConfDelete/>}/>
                                 <Route path="/list-conference" element={<ConfList/>}/>

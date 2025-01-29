@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {BASE_URL} from "../config.js";
+import {BASE_URL} from "../../config.js";
 import {Link} from 'react-router-dom';
-import axiosInstance from "../axiosConfig.js";
+import axiosInstance from "../../axiosConfig.js";
 
 const ConfActive = () => {
     const [conferences, setConferences] = useState([]);

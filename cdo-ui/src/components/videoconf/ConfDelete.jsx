@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { BASE_URL } from "../config.js";
-import axiosInstance from "../axiosConfig.js";
+import { BASE_URL } from "../../config.js";
+import axiosInstance from "../../axiosConfig.js";
 
 const ConfDelete = ({ conferenceId }) => {
     const navigate = useNavigate();

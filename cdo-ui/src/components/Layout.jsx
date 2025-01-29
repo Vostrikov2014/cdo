@@ -29,12 +29,9 @@ const Layout = ({children}) => {
     }, []);
 
     const handleLogout = () => {
-        // Удаление куки
         Cookies.remove('JSESSIONID');
-        // Очищение username
         setUsername('Unknown');
-        // Перенаправление на страницу входа
-        navigate('/login');
+        navigate('/');
     };
 
     //const {keycloak, initialized} = useKeycloak();

@@ -3,8 +3,8 @@ import {useNavigate, useLocation} from 'react-router-dom';
 import DateTimePicker from 'react-datetime-picker';
 import 'react-datetime-picker/dist/DateTimePicker.css';
 import axios from 'axios';
-import {BASE_URL} from "../config.js";
-import axiosInstance from "../axiosConfig.js";
+import {BASE_URL} from "../../config.js";
+import axiosInstance from "../../axiosConfig.js";
 
 const ConfCreateUpdate = () => {
     //это заполнение поумолчанию
