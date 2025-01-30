@@ -10,17 +10,17 @@ const HomeVideoConf = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/conferences`, { withCredentials: true }
+        axios.get(`${BASE_URL}/conferences`, { withCredentials: true,
         //axiosInstance.get(`${BASE_URL}/conferences`
             /*, {
             //headers: {
             //    'Content-Type': 'application/json',
-            //    'Authorization': 'Bearer ' + localStorage.getItem('token')
+            //    'Authorization': 'Bearer ' + localStorage.getItem('token')*/
             auth: {
                 username: 'vd',
                 password: '111'
             }
-        }*/
+        }
         ).then(response => {
             setConferences(response.data)
         }).catch((error) => {
