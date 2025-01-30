@@ -1,6 +1,6 @@
 package com.example.cdoback.service;
 
-import com.example.cdoback.database.entity.Conference;
+import com.example.cdoback.entity.ConferenceEntity;
 import com.example.cdoback.repository.ConferenceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,30 +15,30 @@ public class ConferenceService {
 
     private final ConferenceRepository conferenceRepository;
 
-    public Conference createConference(Conference conference, String hostUsername) {
+    public ConferenceEntity createConference(ConferenceEntity conference, String hostUsername) {
         conference.setHostUsername(hostUsername);
         conference.setConferenceUrl(generateUniqueUrl(conference.getConferenceName()));
         return conferenceRepository.save(conference);
     }
 
-    public Conference updateConference(Conference updatedConference) {
+    public ConferenceEntity updateConference(ConferenceEntity updatedConference) {
         return conferenceRepository.save(updatedConference);  // Сохраняет обновленные данные конференции
     }
 
-    public Optional<Conference> getConference(Long id) {
+    public Optional<ConferenceEntity> getConference(Long id) {
         return conferenceRepository.findById(id);
     }
 
     // Поиск конференции по id
-    public Conference findConferenceById(Long id) {
+    public ConferenceEntity findConferenceById(Long id) {
         return conferenceRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Конференция не найдена"));
     }
 
-    public List<Conference> findAllByHostUsername(String hostUsername) {
+    public List<ConferenceEntity> findAllByHostUsername(String hostUsername) {
         return conferenceRepository.findAllByHostUsername(hostUsername);
     }
 
-    public Optional<Conference> findConferenceByName(String conferenceName) {
+    public Optional<ConferenceEntity> findConferenceByName(String conferenceName) {
         return conferenceRepository.findByConferenceName(conferenceName);
     }
 
@@ -46,7 +46,7 @@ public class ConferenceService {
         conferenceRepository.deleteById(id);
     }
 
-    public List<Conference> findAll() {
+    public List<ConferenceEntity> findAll() {
         return conferenceRepository.findAll();
     }
 

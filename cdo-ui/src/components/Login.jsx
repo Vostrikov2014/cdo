@@ -47,6 +47,10 @@ const Login = () => {
             });
             //console.log(response)
             if (response.status === 200 || response.status === 201) {
+                // Сохраняем данные в sessionStorage
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('password', password);
+                // Перенаправляем на страницу home
                 navigate('/home-video-conf')
             } else {
                 const errorData = await response.json()

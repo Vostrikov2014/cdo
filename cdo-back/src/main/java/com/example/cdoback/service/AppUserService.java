@@ -1,6 +1,6 @@
 package com.example.cdoback.service;
 
-import com.example.cdoback.model.AppUser;
+import com.example.cdoback.entity.AppUserEntity;
 import com.example.cdoback.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,26 +15,26 @@ public class AppUserService {
     private final AppUserRepository appUserRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public List<AppUser> getAppUsers() {
+    public List<AppUserEntity> getAppUsers() {
         return appUserRepository.findAll();
     }
 
-    public AppUser getAppUser(Long id) {
+    public AppUserEntity getAppUser(Long id) {
         return appUserRepository.findById(id).orElse(null);
     }
 
-    public AppUser getAppUserByUsername(String username) {
+    public AppUserEntity getAppUserByUsername(String username) {
         return appUserRepository.findByUsername(username);
     }
 
-    public AppUser addAppUser(AppUser appUser) {
-        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
-        return appUserRepository.save(appUser);
+    public AppUserEntity addAppUser(AppUserEntity appUserEntity) {
+        appUserEntity.setPassword(bCryptPasswordEncoder.encode(appUserEntity.getPassword()));
+        return appUserRepository.save(appUserEntity);
     }
 
-    public AppUser updateAppUser(AppUser appUser, Long id) {
-        appUser.setId(id);
-        return appUserRepository.save(appUser);
+    public AppUserEntity updateAppUser(AppUserEntity appUserEntity, Long id) {
+        appUserEntity.setId(id);
+        return appUserRepository.save(appUserEntity);
     }
 
     public void deleteAppUser(Long id) {

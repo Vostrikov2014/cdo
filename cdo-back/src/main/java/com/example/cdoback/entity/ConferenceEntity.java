@@ -1,4 +1,4 @@
-package com.example.cdoback.database.entity;
+package com.example.cdoback.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,13 +9,12 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
 @Table(name = "conferences")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class Conference {
-
+public class ConferenceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

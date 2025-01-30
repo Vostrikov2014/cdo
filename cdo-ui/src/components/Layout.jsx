@@ -29,6 +29,7 @@ const Layout = ({children}) => {
     }, []);
 
     const handleLogout = () => {
+        sessionStorage.clear();
         Cookies.remove('JSESSIONID');
         setUsername('Unknown');
         navigate('/');

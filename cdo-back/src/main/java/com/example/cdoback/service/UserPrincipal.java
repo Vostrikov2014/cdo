@@ -1,6 +1,6 @@
 package com.example.cdoback.service;
 
-import com.example.cdoback.model.AppUser;
+import com.example.cdoback.entity.AppUserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,10 +10,10 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
-    private final AppUser appUser;
+    private final AppUserEntity appUserEntity;
 
-    public UserPrincipal(AppUser appUser) {
-        this.appUser = appUser;
+    public UserPrincipal(AppUserEntity appUserEntity) {
+        this.appUserEntity = appUserEntity;
     }
 
     @Override
@@ -23,12 +23,12 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return appUser.getPassword();
+        return appUserEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return appUser.getUsername();
+        return appUserEntity.getUsername();
     }
 
     @Override

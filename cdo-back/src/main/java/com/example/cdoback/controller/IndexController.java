@@ -1,6 +1,7 @@
 package com.example.cdoback.controller;
 
-import com.example.cdoback.database.entity.Conference;
+import com.example.cdoback.dto.Conference;
+import com.example.cdoback.entity.ConferenceEntity;
 import com.example.cdoback.service.ConferenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,7 +34,7 @@ public class IndexController {
 
     // Обработка формы создания конференции
     @PostMapping("/create")
-    public String createConference(@ModelAttribute("conference") Conference conference,
+    public String createConference(@ModelAttribute("conference") ConferenceEntity conference,
                                    @AuthenticationPrincipal UserDetails userDetails) {
         conferenceService.createConference(conference, userDetails.getUsername());
         return "redirect:/"; // Перенаправление на главную страницу
@@ -42,7 +43,7 @@ public class IndexController {
     // Запуск конференции
     @GetMapping("/start/{id}")
     public String startConference(@PathVariable Long id, Model model) {
-        Conference conference = conferenceService.findConferenceById(id);
+        ConferenceEntity conference = conferenceService.findConferenceById(id);
         model.addAttribute("conferenceUrl", "https://online3.spa.msu.ru/" + conference.getConferenceName());
         return "conference"; // Ссылка на startConference.html для отображения конференции
     }

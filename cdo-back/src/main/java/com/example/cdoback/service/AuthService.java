@@ -1,6 +1,6 @@
 package com.example.cdoback.service;
 
-import com.example.cdoback.model.AppUser;
+import com.example.cdoback.entity.AppUserEntity;
 import com.example.cdoback.repository.AppUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,14 +16,14 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public boolean authenticate(String username, String password) {
-        AppUser appUser = appUserRepository.findByUsername(username);
-        if (!appUser.getUsername().equals(username)) {
+        AppUserEntity appUserEntity = appUserRepository.findByUsername(username);
+        if (!appUserEntity.getUsername().equals(username)) {
             throw new UsernameNotFoundException("User name or Password is incorrect");
         }
         /*if (appUser.getPasswordHash().equals(bCryptPasswordEncoder.encode(password))) {
            throw new BadCredentialsException("User name or Password is incorrect");
         }*/
-        if (appUser.getPassword().equals(bCryptPasswordEncoder.encode(password))) {
+        if (appUserEntity.getPassword().equals(bCryptPasswordEncoder.encode(password))) {
             throw new BadCredentialsException("User name or Password is incorrect");
         }
         return true;

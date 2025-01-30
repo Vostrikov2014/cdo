@@ -8,8 +8,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
     (config) => {
-        const username = 'vd'; //process.env.REACT_APP_API_USERNAME;
-        const password = '111'; //process.env.REACT_APP_API_PASSWORD;
+        const username = sessionStorage.getItem('username'); //'vd'; //process.env.REACT_APP_API_USERNAME;
+        const password = sessionStorage.getItem('password'); //'111'; //process.env.REACT_APP_API_PASSWORD;
         if (username && password) {
             config.auth = {
                 username,

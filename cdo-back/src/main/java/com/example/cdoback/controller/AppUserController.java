@@ -1,6 +1,6 @@
 package com.example.cdoback.controller;
 
-import com.example.cdoback.model.AppUser;
+import com.example.cdoback.entity.AppUserEntity;
 import com.example.cdoback.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +14,18 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     @GetMapping("/users")
-    public List<AppUser> getAppUsers() {
+    public List<AppUserEntity> getAppUsers() {
         return appUserService.getAppUsers();
     }
 
     @GetMapping("/user/{id}")
-    public AppUser getAppUser(@PathVariable("id") Long id) {
+    public AppUserEntity getAppUser(@PathVariable("id") Long id) {
         return appUserService.getAppUser(id);
     }
 
     @PostMapping("/user/{id}")
-    public AppUser updateAppUser(@RequestBody() AppUser appUser, @PathVariable("id") Long id) {
-        return appUserService.updateAppUser(appUser, id);
+    public AppUserEntity updateAppUser(@RequestBody() AppUserEntity appUserEntity, @PathVariable("id") Long id) {
+        return appUserService.updateAppUser(appUserEntity, id);
     }
 
 

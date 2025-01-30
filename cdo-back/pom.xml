@@ -37,6 +37,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.6.5.Final</version>
+        </dependency>
+
 
         <!-- Data -->
         <dependency>

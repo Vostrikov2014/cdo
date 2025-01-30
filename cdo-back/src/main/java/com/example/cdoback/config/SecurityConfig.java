@@ -32,12 +32,6 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    // Определение BCryptPasswordEncoder для кодирования паролей
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -64,6 +58,12 @@ public class SecurityConfig {
 
 
         return http.build();
+    }
+
+    // Определение BCryptPasswordEncoder для кодирования паролей
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
