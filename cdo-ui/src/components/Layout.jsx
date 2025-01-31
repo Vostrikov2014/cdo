@@ -11,7 +11,7 @@ const Layout = ({children}) => {
     const [username, setUsername] = useState(null);
     const navigate = useNavigate();
 
-    useEffect(() => {
+    /*useEffect(() => {
         const sessionId = Cookies.get('JSESSIONID'); // Получаем идентификатор сессии из cookie
         if (sessionId) {
             // Отправляем запрос к серверу для получения имени пользователя из сессии
@@ -26,10 +26,29 @@ const Layout = ({children}) => {
                     setUsername('Unknown'); // Если запрос не удался
                 });
         }
-    }, []);
+    }, []);*/
+
+    // Получаем имя пользователя из Local storage при загрузке компонента
+    useEffect(() => {
+        const localUsername = localStorage.getItem('username');
+        if (localUsername) {
+            console.log(localUsername);
+            // Отправляем запрос к серверу для получения имени пользователя из сессии
+            axiosInstance.get(`${BASE_URL}/username-str`, {params: {localUsername}})
+                .then(response => {
+                    setUsername(response.data); // Устанавливаем имя пользователя
+                })
+                .catch((error) => {
+                    console.log("User Unknown", error);
+                    setUsername('Unknown'); // Если запрос не удался
+                });
+        } else {
+            setUsername(null);
+        }
+    }, [localStorage.getItem('username')]);
 
     const handleLogout = () => {
-        sessionStorage.clear();
+        localStorage.clear();
         Cookies.remove('JSESSIONID');
         setUsername('Unknown');
         navigate('/');

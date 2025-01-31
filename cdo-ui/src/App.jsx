@@ -38,6 +38,26 @@ const App = () => {
         }
     }, [initialized, keycloak]);*/
 
+    // Получаем имя пользователя из Local storage при загрузке компонента
+    useEffect(() => {
+        const localUsername = localStorage.getItem('username');
+        if (localUsername) {
+            console.log(localUsername);
+            // Отправляем запрос к серверу для получения имени пользователя из сессии
+            axiosInstance.get(`${BASE_URL}/username-str`, {params: {localUsername}})
+                .then(response => {
+                    setUsername(response.data); // Устанавливаем имя пользователя
+                })
+                .catch((error) => {
+                    console.log("User Unknown", error);
+                    setUsername('Unknown'); // Если запрос не удался
+                });
+        } else {
+            setUsername(null);
+        }
+    }, [localStorage.getItem('username')]);
+
+    /*// Получаем имя пользователя из cookie при загрузке компонента
     useEffect(() => {
         const sessionId = Cookies.get('JSESSIONID'); // Получаем идентификатор сессии из cookie
         if (sessionId) {
@@ -55,7 +75,7 @@ const App = () => {
         } else {
             setUsername(null);
         }
-    }, []);
+    }, []);*/
 
     // Отображение логотипа, имени пользователя, фона и пр. в зависимости от текущего пути
     const disableLogoLink = location.pathname === '/';

@@ -35,21 +35,17 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault(); // Предотвратим отравку по умолчанию
         setError('');
-        const loginData = {
-            username,
-            password
-        }
+        const loginData = {username, password}
 
         try {
-            const response = await axios.post(`${BASE_URL}/login`,
-                loginData, {
-                withCredentials: true // Включает cookie
-            });
-            //console.log(response)
+            const response =
+                await axios.post(`${BASE_URL}/login`, loginData, { withCredentials: true}); // Включает cookie
+                //console.log(response)
+
             if (response.status === 200 || response.status === 201) {
                 // Сохраняем данные в sessionStorage
-                sessionStorage.setItem('username', username);
-                sessionStorage.setItem('password', password);
+                localStorage.setItem('username', username);
+                localStorage.setItem('password', password);
                 // Перенаправляем на страницу home
                 navigate('/home-video-conf')
             } else {

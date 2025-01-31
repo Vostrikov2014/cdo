@@ -37,7 +37,7 @@ public class AuthController {
             boolean isAuthenticated = authService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
             if (isAuthenticated) {
                 session.setAttribute("user", loginRequest.getUsername());
-                session.setAttribute("password", loginRequest.getPassword());
+                //session.setAttribute("password", loginRequest.getPassword());
                 System.out.println("Session ID: " + session.getId());
                 System.out.println("Username: " + session.getAttribute("user"));
                 return ResponseEntity.status(HttpStatus.CREATED).body("Login was successful!");
@@ -60,6 +60,14 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No user logged in.");
     }
 
+    @GetMapping("/username-str")
+    public ResponseEntity<String> getUsernameByString(String localUsername) {
+        if (localUsername != null) {
+            return ResponseEntity.ok(appUserService.getAppUserByUsername(localUsername).getFirstname()
+                    + " " + appUserService.getAppUserByUsername(localUsername).getLastname());
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No user logged in.");
+    }
 
     @GetMapping("/session")
     public ResponseEntity<?> checkSession(HttpServletRequest request) {
