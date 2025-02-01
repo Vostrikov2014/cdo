@@ -1,7 +1,7 @@
-package com.example.cdoback.controller;
+package com.example.cdoback.controller.videoconf;
 
 import com.example.cdoback.database.entity.Conference;
-import com.example.cdoback.service.ConferenceService;
+import com.example.cdoback.service.videoconf.ConferenceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;

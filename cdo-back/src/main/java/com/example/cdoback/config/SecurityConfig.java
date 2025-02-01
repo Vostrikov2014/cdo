@@ -39,7 +39,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         //Keycloak
         /*httpSecurity
@@ -53,17 +53,24 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter())));*/ // Настройка JWT аутентификации
 
         //Spring Security
-        http
-                .csrf(AbstractHttpConfigurer::disable)                                            // Отключаем CSRF для прототипов REST API
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))                // Включаем CORS
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/register", "/username").permitAll()    // Доступ без аутентификации
-                        .anyRequest().authenticated()                                             // Требуется аутентификация для остальных запросов
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)                             // Отключаем CSRF для прототипов REST API
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Включаем CORS
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/register").permitAll()    // Доступ без аутентификации
+                        .anyRequest().authenticated()                              // Требуется аутентификация для остальных запросов
                 )
-                .httpBasic(Customizer.withDefaults());                                            // Это использует стандартные настройки CORS
+                //.httpBasic(Customizer.withDefaults()) // Это использует стандартные настройки CORS
+                /*.formLogin(login -> login
+                        .loginPage("/login")             // Страница входа
+                        .permitAll()
+                )*/
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Требуем сессию
+                        .maximumSessions(1)                                        // Максимальное количество сессий
+                );
 
-
-        return http.build();
+        return httpSecurity.build();
     }
 
     @Bean

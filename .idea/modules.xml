@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/cdo.iml" filepath="$PROJECT_DIR$/.idea/cdo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cdo-back/cdo-back/cdo-back.iml" filepath="$PROJECT_DIR$/cdo-back/cdo-back/cdo-back.iml" />
     </modules>
   </component>
 </project>

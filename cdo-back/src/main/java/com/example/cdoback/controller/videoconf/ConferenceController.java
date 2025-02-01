@@ -1,8 +1,7 @@
-package com.example.cdoback.controller;
+package com.example.cdoback.controller.videoconf;
 
 import com.example.cdoback.database.entity.Conference;
-import com.example.cdoback.service.ConferenceService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.cdoback.service.videoconf.ConferenceService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.GrantedAuthority;
