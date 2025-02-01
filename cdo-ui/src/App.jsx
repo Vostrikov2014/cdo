@@ -136,6 +136,7 @@ const App = () => {
                             <Route path="/login" element={<Login/>}/>
                             <Route path="/home-video-conf" element={<HomeVideoConf/>}/>
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
+                            <Route path="/schedule" element={<Schedule />} />
                         </Routes>
                     </div>
                 )
@@ -156,6 +157,8 @@ const App = () => {
                                 <Route path="/list-conference" element={<ConfList/>}/>
                                 <Route path="/conference-details/:id" element={<ConfDetails/>}/>
                                 <Route path="/active-conf" element={<ConfActive/>}/>
+                                <Route path="/create-lesson" element={<CreateLesson />} />
+                                <Route path="/edit-lesson/:id" element={<EditLesson />} />
                             </Routes>
                         </div>
                     </Layout>

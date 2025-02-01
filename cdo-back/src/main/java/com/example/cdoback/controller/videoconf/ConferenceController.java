@@ -1,7 +1,7 @@
-package com.example.cdoback.controller;
+package com.example.cdoback.controller.videoconf;
 
 import com.example.cdoback.entity.ConferenceEntity;
-import com.example.cdoback.service.ConferenceService;
+import com.example.cdoback.service.videoconf.ConferenceService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;

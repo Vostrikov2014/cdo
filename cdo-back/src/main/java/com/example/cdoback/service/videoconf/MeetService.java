@@ -1,4 +1,4 @@
-package com.example.cdoback.service;
+package com.example.cdoback.service.videoconf;
 
 import org.springframework.stereotype.Service;
 

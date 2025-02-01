@@ -83,7 +83,7 @@ const Index = () => {
                     <div className="d-flex align-items-center mb-3">
                         <img src="/images/logocdo.svg" alt="Logo" style={{width: '65px'}}/>
                         <div className="col ps-3">
-                            <Link to="/under-construction"
+                            <Link to="/schedule"
                                   className="btn btn-link d-block"
                                   style={{
                                       fontWeight: 'bold',

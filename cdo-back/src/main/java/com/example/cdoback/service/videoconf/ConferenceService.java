@@ -1,4 +1,4 @@
-package com.example.cdoback.service;
+package com.example.cdoback.service.videoconf;
 
 import com.example.cdoback.entity.ConferenceEntity;
 import com.example.cdoback.repository.ConferenceRepository;
