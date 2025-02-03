@@ -18,6 +18,13 @@ import IndexVideoConf from "./components/videoconf/IndexVideoConf.jsx";
 import Cookies from "js-cookie";
 import axiosInstance from "./axiosConfig.js";
 import {BASE_URL} from "./config.js";
+import CreateLesson from "./components/schedule/CreateLesson.jsx";
+import EditLesson from "./components/schedule/EditLesson.jsx";
+import Schedule from "./components/schedule/Schedule.jsx";
+import AddStudent from "./components/schedule/AddStudent.jsx";
+import AddClassroom from "./components/schedule/AddClassroom.jsx";
+import StudentList from "./components/schedule/StudentList.jsx";
+import ClassroomList from "./components/schedule/ClassroomList.jsx";
 
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
@@ -50,7 +57,7 @@ const App = () => {
                 })
                 .catch((error) => {
                     console.log("User Unknown", error);
-                    setUsername('Unknown'); // Если запрос не удался
+                    setUsername('Unknown is App'); // Если запрос не удался
                 });
         } else {
             setUsername(null);
@@ -159,6 +166,11 @@ const App = () => {
                                 <Route path="/active-conf" element={<ConfActive/>}/>
                                 <Route path="/create-lesson" element={<CreateLesson />} />
                                 <Route path="/edit-lesson/:id" element={<EditLesson />} />
+                                <Route path="/schedule" element={<Schedule />} />
+                                <Route path="/add-student" element={<AddStudent />} />
+                                <Route path="/add-classroom" element={<AddClassroom />} />
+                                <Route path="/students" element={<StudentList />} />
+                                <Route path="/classrooms" element={<ClassroomList />} />
                             </Routes>
                         </div>
                     </Layout>

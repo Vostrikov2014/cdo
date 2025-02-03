@@ -12,7 +12,7 @@ const Schedule = () => {
 
     const fetchLessons = async () => {
         try {
-            const response = await axiosInstance.get(`${BASE_URL}/api/lessons``);
+            const response = await axiosInstance.get(`${BASE_URL}/api/lessons`);
             setLessons(response.data);
         } catch (error) {
             console.error('Error fetching lessons:', error);
@@ -30,7 +30,7 @@ const Schedule = () => {
                 <tr>
                     <th>Day</th>
                     <th>Time</th>
-                    <th>Subject</th>
+                    <th>Student</th>
                     <th>Classroom</th>
                     <th>Actions</th>
                 </tr>
@@ -40,8 +40,8 @@ const Schedule = () => {
                     <tr key={lesson.id}>
                         <td>{lesson.dayOfWeek}</td>
                         <td>{lesson.startTime} - {lesson.endTime}</td>
-                        <td>{lesson.subject.name}</td>
-                        <td>{lesson.classroom.roomNumber}</td>
+                        <td>{lesson.student?.name || 'N/A'}</td>
+                        <td>{lesson.classroom?.roomNumber || 'N/A'}</td>
                         <td>
                             <Link to={`/edit-lesson/${lesson.id}`} className="btn btn-sm btn-warning me-2">
                                 Edit

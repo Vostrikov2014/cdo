@@ -12,4 +12,5 @@ public class ClassroomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String roomNumber;
+    private int capacity;
 }

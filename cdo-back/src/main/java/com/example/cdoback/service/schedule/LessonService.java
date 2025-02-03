@@ -1,6 +1,7 @@
 package com.example.cdoback.service.schedule;
 
 import com.example.cdoback.entity.LessonEntity;
+import com.example.cdoback.exception.ResourceNotFoundException;
 import com.example.cdoback.repository.LessonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

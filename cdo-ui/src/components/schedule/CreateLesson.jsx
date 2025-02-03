@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axiosInstance from '../../axiosConfig.js';
 import { useNavigate } from 'react-router-dom';
+import {BASE_URL} from "../../config.js";
 
 const CreateLesson = () => {
     const [formData, setFormData] = useState({
-        subjectId: '',
+        studentId: '',
         classroomId: '',
         startTime: '',
         durationMinutes: 45,
@@ -15,7 +16,7 @@ const CreateLesson = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axiosInstance.post('/api/lessons', formData);
+            await axiosInstance.post(`${BASE_URL}/api/lessons`, formData);
             navigate('/schedule'); // Перенаправляем на страницу расписания
         } catch (error) {
             console.error('Error creating lesson:', error);
@@ -27,11 +28,11 @@ const CreateLesson = () => {
             <h1>Create Lesson</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label>Subject ID</label>
+                    <label>Student ID</label>
                     <input
                         type="text"
                         className="form-control"
-                        value={formData.subjectId}
+                        value={formData.studentId}
                         onChange={(e) => setFormData({ ...formData, subjectId: e.target.value })}
                     />
                 </div>
