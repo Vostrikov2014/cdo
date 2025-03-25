@@ -47,7 +47,7 @@ public class AuthorizationServerConfig {
             .build();
     }
 
-    /*@Bean
+    @Bean
     public RegisteredClientRepository registeredClientRepository() {
         List<RegisteredClient> clients = clientRepository.findAll().stream()
                 .map(client -> RegisteredClient.withId(client.getId().toString())
@@ -64,7 +64,7 @@ public class AuthorizationServerConfig {
                 ).collect(Collectors.toList());
 
         return new InMemoryRegisteredClientRepository(clients);
-    }*/
+    }
 
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
