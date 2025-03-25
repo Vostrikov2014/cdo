@@ -6,8 +6,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@Entity
-@Table(name = "users")
+//@Entity
+//@Table(name = "users")
 public class AppUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
