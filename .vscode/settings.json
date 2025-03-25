@@ -2,6 +2,6 @@
     "window.zoomLevel": 1,
     "maven.view": "flat",
     "java.compile.nullAnalysis.mode": "automatic",
-    "editor.fontSize": 15,
+    "editor.fontSize": 14,
     "editor.lineHeight": 1.5
 }
