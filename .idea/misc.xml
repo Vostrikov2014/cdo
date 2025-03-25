@@ -6,6 +6,7 @@
       <list>
         <option value="$PROJECT_DIR$/cdo-back/cdo-back/pom.xml" />
         <option value="$PROJECT_DIR$/cdo-back/pom.xml" />
+        <option value="$PROJECT_DIR$/auth-server/pom.xml" />
       </list>
     </option>
   </component>
