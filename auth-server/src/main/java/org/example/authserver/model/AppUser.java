@@ -27,6 +27,7 @@ public class AppUser implements UserDetails {
     private String username;
     private String password;
     private String roles; // Пример: "ROLE_USER,ROLE_ADMIN"
+    private boolean enabled = true;
 
     @Override
     public String getUsername() {
