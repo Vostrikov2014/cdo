@@ -6,7 +6,7 @@ spring:
     name: auth-server
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/cdo
+    url: jdbc:mariadb://localhost:3306/auth
     username: vd
     password: 111
     driver-class-name: org.mariadb.jdbc.Driver

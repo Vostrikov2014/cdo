@@ -9,14 +9,12 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.example.authserver.model.OAuthClient;
 import org.example.authserver.repository.OAuthClientRepository;
 import org.example.authserver.service.Jwks;
-import org.example.authserver.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,49 +31,43 @@ import org.springframework.security.oauth2.server.authorization.settings.Authori
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
 import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 
+import javax.sql.DataSource;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.stream;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    //@Autowired
-    //private UserDetailsServiceImpl userDetailsServiceImpl;
-
     @Autowired
     private OAuthClientRepository clientRepository;
 
     @Bean
-    public SecurityFilterChain asFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain authServerFilterChain(HttpSecurity http) throws Exception {
 
-        http.formLogin(withDefaults());
+        OAuth2AuthorizationServerConfigurer authServer = new OAuth2AuthorizationServerConfigurer();
 
-        // Настройка доступа
-        //OAuth2AuthorizationServerConfiguration.applyDefaultSecurity(http);
-        http.authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/login", "/oauth2/**", "/webjars/**", "/error").permitAll()
-                .anyRequest().authenticated());
-
-        http.csrf(csrf -> csrf.ignoringRequestMatchers("/oauth2/**"))
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
-
-        // Используем новый способ регистрации OAuth2AuthorizationServerConfigurer
-        http.with(new OAuth2AuthorizationServerConfigurer(), authorizationServerConfigurer -> {
-            authorizationServerConfigurer.oidc(withDefaults()); // Включаем OIDC
-        });
+        http
+                .with(authServer, withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/oauth2/**", "/webjars/**", "/error").permitAll()
+                        .anyRequest().authenticated())
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/oauth2/**"))
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+                .with(authServer, conf -> conf.oidc(withDefaults()))
+                .formLogin(withDefaults());
 
         // Обработка ошибок
         http.exceptionHandling(
-                e -> e.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                ex -> ex.authenticationEntryPoint(
+                        new LoginUrlAuthenticationEntryPoint("localhost:3000/login"))
         );
 
         return http.build();
@@ -94,8 +86,8 @@ public class SecurityConfig {
                     .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                     .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                     .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
-                    .redirectUri("http://localhost:8080/login/oauth2/code/client-id") // Замените на ваш URL
-                    .scope(OidcScopes.OPENID) // OIDC поддержка
+                    .redirectUri("http://localhost:3000") // Замените на ваш URL
+                    .scope(OidcScopes.OPENID) // OIDC поддер/жка
                     .scope("profile")
                     .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                     .build();
@@ -150,11 +142,11 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(
-            UserDetailsService userService,
+            UserDetailsService userDetailsService,
             PasswordEncoder passwordEncoder
     ) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userService);
+        provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(provider);
     }
@@ -162,5 +154,10 @@ public class SecurityConfig {
     @Bean
     public AuthorizationServerSettings authorizationServerSettings() {
         return AuthorizationServerSettings.builder().build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(DataSource dataSource) {
+        return new JdbcUserDetailsManager(dataSource);
     }
 }

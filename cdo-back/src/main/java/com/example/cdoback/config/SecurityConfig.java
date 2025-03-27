@@ -1,6 +1,7 @@
 package com.example.cdoback.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -32,6 +33,9 @@ public class SecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Value("${keySetURI}")
+    private String keySetUri;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -47,15 +51,20 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter())));*/ // Настройка JWT аутентификации
 
         //Spring Security
-        http
-                .csrf(AbstractHttpConfigurer::disable)                                            // Отключаем CSRF для прототипов REST API
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))                // Включаем CORS
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/login", "/register", "/username").permitAll()    // Доступ без аутентификации
-                        .anyRequest().authenticated()                                             // Требуется аутентификация для остальных запросов
-                )
-                .httpBasic(Customizer.withDefaults());                                            // Это использует стандартные настройки CORS
+        http.csrf(AbstractHttpConfigurer::disable)                                            // Отключаем CSRF для прототипов REST API
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))                // Включаем CORS
+            .authorizeHttpRequests(authorize -> authorize
+                   .requestMatchers("/login", "/register", "/username").permitAll()    // Доступ без аутентификации
+                   .anyRequest().authenticated()                                             // Требуется аутентификация для остальных запросов
+            );
+            //.httpBasic(Customizer.withDefaults());                                            // Это использует стандартные настройки CORS
 
+        // Authorization server configuration
+        http.oauth2ResourceServer(
+                oauth2 -> oauth2.jwt(
+                        token -> token.jwkSetUri(keySetUri)
+                )
+        );
 
         return http.build();
     }

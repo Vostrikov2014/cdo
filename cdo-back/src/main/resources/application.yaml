@@ -33,3 +33,5 @@ spring:
         jwt:
           issuer-uri: http://localhost:8091/realms/cdo-realm
           jwk-set-uri: http://localhost:8091/realms/cdo-realm/protocol/openid-connect/certs
+
+keySetURI: http://localhost:8095/oauth2/jwks

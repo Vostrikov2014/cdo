@@ -1,6 +1,7 @@
 package org.example.authserver.service;
 
 import org.example.authserver.repository.UserRepository;
+import org.example.authserver.security.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return new SecurityUser(userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 }

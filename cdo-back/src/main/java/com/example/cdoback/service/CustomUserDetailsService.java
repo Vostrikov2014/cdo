@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final AppUserRepository appUserRepository;
-    private final AuthorityRepository authorityRepository;
+    //private final AuthorityRepository authorityRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -29,10 +29,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         // Получаем роли пользователя
-        List<GrantedAuthority> authorities = authorityRepository.findByUsername(username)
+        /*List<GrantedAuthority> authorities = authorityRepository.findByUsername(username)
                 .stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
         return new UserPrincipal(appUserEntity);
     }

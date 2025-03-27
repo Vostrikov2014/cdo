@@ -3,8 +3,8 @@ package com.example.cdoback.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-//@Entity
-//@Table(name = "authorities")
+@Entity
+@Table(name = "authorities")
 @Data
 public class AuthorityEntity {
     @Id

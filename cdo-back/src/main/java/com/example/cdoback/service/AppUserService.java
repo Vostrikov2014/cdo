@@ -40,5 +40,4 @@ public class AppUserService {
     public void deleteAppUser(Long id) {
         appUserRepository.deleteById(id);
     }
-
 }
