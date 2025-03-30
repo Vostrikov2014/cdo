@@ -17,6 +17,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -51,15 +52,14 @@ public class SecurityConfig {
 
         OAuth2AuthorizationServerConfigurer authServer = new OAuth2AuthorizationServerConfigurer();
 
-        http
-                .with(authServer, withDefaults())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/oauth2/**", "/webjars/**", "/error").permitAll()
-                        .anyRequest().authenticated())
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/oauth2/**"))
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
-                .with(authServer, conf -> conf.oidc(withDefaults()))
-                .formLogin(withDefaults());
+        http.csrf(AbstractHttpConfigurer::disable)
+            .with(authServer, withDefaults())
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/auth/register", "/login", "/oauth2/**", "/webjars/**", "/error").permitAll()
+                    .anyRequest().authenticated())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
+            .with(authServer, conf -> conf.oidc(withDefaults()))
+            .formLogin(withDefaults());
 
         // Обработка ошибок
         http.exceptionHandling(

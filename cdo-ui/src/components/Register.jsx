@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {BASE_URL} from '../config';
+import {BASE_URL, AUTH_URL} from '../config';
 import {useNavigate} from "react-router-dom";
 
 const Register = () => {
@@ -23,7 +23,7 @@ const Register = () => {
         setSuccess(false);
 
         try {
-            const response = await axios.post(`${BASE_URL}/register`, formData);
+            const response = await axios.post(`${AUTH_URL}/api/auth/register`, formData);
             /*const response = await axios.post(`${BASE_URL}/register`, {
                 userName: formData.username, password: formData.password,
                 firstName: formData.firstname, lastName: formData.lastname,
@@ -60,27 +60,15 @@ const Register = () => {
                     />
                 </div>
                 <div className="form-group mb-3">
-                    <label>Password:</label>
-                    <input type="password" className="form-control" placeholder="Enter your password *"
-                           name="password" value={formData.password} onChange={handleChange} required
-                    />
-                </div>
-                <div className="form-group mb-3">
-                    <label>First name:</label>
-                    <input type="firstname" className="form-control" placeholder="Enter your firstname"
-                           name="firstname" value={formData.firstname} onChange={handleChange}
-                    />
-                </div>
-                <div className="form-group mb-3">
-                    <label>Last name:</label>
-                    <input type="lastname" className="form-control" placeholder="Enter your lastname"
-                           name="lastname" value={formData.lastname} onChange={handleChange}
-                    />
-                </div>
-                <div className="form-group mb-3">
                     <label>Email:</label>
                     <input type="email" className="form-control" placeholder="Enter your lastname"
                            name="email" value={formData.email} onChange={handleChange}
+                    />
+                </div>
+                <div className="form-group mb-3">
+                    <label>Password:</label>
+                    <input type="password" className="form-control" placeholder="Enter your password *"
+                           name="password" value={formData.password} onChange={handleChange} required
                     />
                 </div>
                 <button type="submit" className="btn btn-primary w-100" style={{backgroundColor: '#0f47ad'}}>Register

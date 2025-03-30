@@ -1,6 +1,8 @@
 package org.example.authserver.service;
 
+import lombok.RequiredArgsConstructor;
 import org.example.authserver.model.AppUser;
+import org.example.authserver.model.AppUser1;
 import org.example.authserver.repository.AppUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,15 +10,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AppUserService {
 
     private final AppUserRepository appUserRepository;
-    private final PasswordEncoder bCryptPasswordEncoder;
-
-    public AppUserService(AppUserRepository appUserRepository, PasswordEncoder bCryptPasswordEncoder) {
-        this.appUserRepository = appUserRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     public List<AppUser> getAppUsers() {
         return appUserRepository.findAll();
@@ -31,7 +29,7 @@ public class AppUserService {
     }
 
     public AppUser addAppUser(AppUser appUser) {
-        appUser.setPassword(bCryptPasswordEncoder.encode(appUser.getPassword()));
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         return appUserRepository.save(appUser);
     }
 

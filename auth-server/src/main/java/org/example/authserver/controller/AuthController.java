@@ -3,8 +3,11 @@ package org.example.authserver.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.example.authserver.dto.LoginRequest;
-import org.example.authserver.model.AppUser;
+import org.example.authserver.dto.RegisterRequest;
+import org.example.authserver.model.AppUser1;
 import org.example.authserver.service.AppUserService;
 import org.example.authserver.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -12,28 +15,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AppUserService appUserService;
     private final AuthService authService;
 
-    public AuthController(AppUserService appUserService, AuthService authService) {
-        this.appUserService = appUserService;
-        this.authService = authService;
-    }
-
     @PostMapping("/register")
-    public ResponseEntity<AppUser> newAppUser(@RequestBody() AppUser appUser) {
-        AppUser newUser = appUserService.addAppUser(appUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public ResponseEntity<String> registerUser(@Valid @RequestBody RegisterRequest request) {
+        authService.registerUser(request);
+        return ResponseEntity.ok("User registered successfully");
     }
 
     // Basic authenticated
@@ -60,8 +57,8 @@ public class AuthController {
     public ResponseEntity<String> getUsernameFromSession(HttpSession session) {
         Object username = session.getAttribute("user");
         if (username != null) {
-            return ResponseEntity.ok(appUserService.getAppUserByUsername(username.toString()).getFirstname()
-                    + " " + appUserService.getAppUserByUsername(username.toString()).getLastname());
+            return ResponseEntity.ok(appUserService.getAppUserByUsername(username.toString())
+                    + " " + appUserService.getAppUserByUsername(username.toString()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No user logged in.");
     }
@@ -69,8 +66,8 @@ public class AuthController {
     @GetMapping("/username-str")
     public ResponseEntity<String> getUsernameByString(String localUsername) {
         if (localUsername != null) {
-            return ResponseEntity.ok(appUserService.getAppUserByUsername(localUsername).getFirstname()
-                    + " " + appUserService.getAppUserByUsername(localUsername).getLastname());
+            return ResponseEntity.ok(appUserService.getAppUserByUsername(localUsername)
+                    + " " + appUserService.getAppUserByUsername(localUsername));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No user logged in.");
     }

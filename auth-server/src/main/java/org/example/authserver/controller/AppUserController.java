@@ -1,6 +1,7 @@
 package org.example.authserver.controller;
 
 import org.example.authserver.model.AppUser;
+import org.example.authserver.model.AppUser1;
 import org.example.authserver.service.AppUserService;
 import org.springframework.web.bind.annotation.*;
 

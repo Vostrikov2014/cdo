@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
-@Entity
+//@Entity
 @Table(name = "authorities")
 @Data
 @NoArgsConstructor
@@ -18,7 +18,7 @@ public class Authority implements GrantedAuthority {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private AppUser user;
+    private AppUser1 user;
 
     @Column(nullable = false)
     private String authority; // Например: "ROLE_ADMIN", "ROLE_USER"
