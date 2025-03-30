@@ -6,8 +6,7 @@ import {useNavigate} from "react-router-dom";
 const Register = () => {
 
     const [formData, setFormData] = useState({
-        username: null, password: null, firstname: null,
-        lastname: null, email: null
+        username: null, email: null, password: null
     })
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(false);
@@ -21,11 +20,11 @@ const Register = () => {
         e.preventDefault();
         setError(null);
         setSuccess(false);
-
         try {
             const response = await axios.post(`${AUTH_URL}/api/auth/register`, formData);
             /*const response = await axios.post(`${BASE_URL}/register`, {
                 userName: formData.username, password: formData.password,
+            const response = await axios.post("http://l
                 firstName: formData.firstname, lastName: formData.lastname,
                 email: formData.email,
             });*/
