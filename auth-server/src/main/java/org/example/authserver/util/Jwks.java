@@ -1,4 +1,4 @@
-package org.example.authserver.service;
+package org.example.authserver.util;
 
 import com.nimbusds.jose.jwk.RSAKey;
 

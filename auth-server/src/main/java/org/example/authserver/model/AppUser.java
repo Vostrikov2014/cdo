@@ -1,48 +1,68 @@
 package org.example.authserver.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-public class AppUser {
+@Builder
+public class AppUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true, nullable = false)
     private String username;
-
+    @Column(nullable = false)
     private String password;
-    private String authority;     // Пример: "ROLE_USER,ROLE_ADMIN"
-    private boolean enabled = true;
+    private boolean enabled;
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Authority> authorities;
+    private String firstname;
+    private String lastname;
+    private String email;
 
-    public Long getId() {
-        return this.id;
-    }
-
+    @Override
     public String getUsername() {
         return this.username;
     }
 
+    @Override
     public String getPassword() {
         return this.password;
     }
 
-    public String getRoles() {
-        return this.authority;
+    // Реализация методов UserDetails
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.authorities;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 }
-

@@ -1,25 +1,30 @@
 package org.example.authserver.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 @Table(name = "authorities")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Authority {
+@Builder
+public class Authority implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private AppUser user;
 
-    @Column(name = "authority", nullable = false, length = 45)
-    private String authority;
+    @Column(nullable = false)
+    private String authority; // Например: "ROLE_ADMIN", "ROLE_USER"
+
+    @Override
+    public String getAuthority() {
+        return authority;
+    }
 }

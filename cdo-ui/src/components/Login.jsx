@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import {BASE_URL} from '../config';
+import {BASE_URL, AUTH_URL} from '../config';
 import {Link, useNavigate} from "react-router-dom";
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
@@ -39,7 +39,7 @@ const Login = () => {
 
         try {
             const response =
-                await axios.post(`${BASE_URL}/login`, loginData, { withCredentials: true}); // Включает cookie
+                await axios.post(`${AUTH_URL}/login`, loginData, { withCredentials: true}); // Включает cookie
                 //console.log(response)
 
             if (response.status === 200 || response.status === 201) {
@@ -56,7 +56,7 @@ const Login = () => {
             setError("And error occured. pleas retry")
         }
 
-        /*axios.post(`${BASE_URL}/login`, loinData)
+        /*axios.post(`${AUTH_URL}/login`, loinData)
             .then(() => window.location = '/home-video-conf')
             .catch((err) => {
                 console.error(err);
