@@ -8,8 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="auth" />
-        <module name="cdo-back" />
         <module name="auth-server" />
+        <module name="cdo-back" />
       </profile>
     </annotationProcessing>
   </component>

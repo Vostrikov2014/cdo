@@ -5,8 +5,10 @@ import org.example.auth.dto.RegisterRequest;
 import org.example.auth.model.AppUser;
 import org.example.auth.repository.AppUserRepository;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +18,24 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private final JdbcUserDetailsManager userDetailsManager;
+
     private final AppUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    public void registerNewUser(RegisterRequest request) {
+        if (userDetailsManager.userExists(request.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        UserDetails appUser = AppUser.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
+                //.roles(roles)
+                .build();
+
+        userDetailsManager.createUser(appUser);
+    }
 
     @Transactional
     public void registerUser(RegisterRequest request) {

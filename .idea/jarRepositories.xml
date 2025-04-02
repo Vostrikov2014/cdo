@@ -14,6 +14,11 @@
     <remote-repository>
       <option name="id" value="private" />
       <option name="name" value="ppod-maven-private" />
+      <option name="url" value="http://artifactory.dev.ppod.cbr.ru/artifactory/ppod-maven-private" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="private" />
+      <option name="name" value="ppod-maven-private" />
       <option name="url" value="https://artifactory.dev.ppod.cbr.ru/artifactory/ppod-maven-private" />
     </remote-repository>
     <remote-repository>
@@ -25,6 +30,11 @@
       <option name="id" value="jboss.community" />
       <option name="name" value="JBoss Community repository" />
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="trusted" />
+      <option name="name" value="ppod-maven-trusted" />
+      <option name="url" value="http://artifactory.dev.ppod.cbr.ru/artifactory/ppod-maven-trusted" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="trusted" />

@@ -37,6 +37,14 @@ public class AppUser implements UserDetails {
     @Column(unique = true)
     private String email;
 
+    @NotBlank
+    private boolean enabled = true;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "username"))
+    @Column(name = "authority")
+    private Set<String> authority;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
