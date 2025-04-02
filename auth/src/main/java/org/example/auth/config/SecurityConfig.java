@@ -22,15 +22,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        OAuth2AuthorizationServerConfigurer authServer = OAuth2AuthorizationServerConfigurer.authorizationServer();
+        //OAuth2AuthorizationServerConfigurer authServer = OAuth2AuthorizationServerConfigurer.authorizationServer();
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register").permitAll()
-                        .anyRequest().authenticated())
-                .with(authServer, config -> config.oidc(withDefaults()));
+                        .anyRequest().authenticated());
+                //.with(authServer, config -> config.oidc(withDefaults())
+                //);
 
         return http.build();
     }

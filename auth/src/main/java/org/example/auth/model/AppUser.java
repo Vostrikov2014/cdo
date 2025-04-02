@@ -22,39 +22,28 @@ import java.util.stream.Collectors;
 public class AppUser implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Email
     @NotBlank
-    @Column(unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @NotBlank
+    @Column(nullable = false, length = 255)
     private String password;
 
-    @Email
-    @NotBlank
-    @Column(unique = true)
-    private String email;
+    @Column(nullable = false)
+    private boolean enabled;
 
-    @NotBlank
-    private boolean enabled = true;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Set<Authority> authorities;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "authorities", joinColumns = @JoinColumn(name = "username"))
-    @Column(name = "authority")
-    private Set<String> authority;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private Set<String> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+        return authorities.stream().
+                map(a -> (GrantedAuthority) a)
+                .collect(Collectors.toSet());
     }
-
     @Override
     public boolean isAccountNonExpired() { return true; }
     @Override

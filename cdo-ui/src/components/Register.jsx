@@ -53,15 +53,9 @@ const Register = () => {
             </div>
             <form onSubmit={handleSubmit}>
                 <div className="form-group mb-3">
-                    <label>User name:</label>
-                    <input type="text" className="form-control" placeholder="Enter your username *"
-                           name="username" value={formData.username} onChange={handleChange} required
-                    />
-                </div>
-                <div className="form-group mb-3">
                     <label>Email:</label>
-                    <input type="email" className="form-control" placeholder="Enter your lastname"
-                           name="email" value={formData.email} onChange={handleChange}
+                    <input type="email" className="form-control" placeholder="Enter your e-mail *"
+                           name="username" value={formData.username} onChange={handleChange}
                     />
                 </div>
                 <div className="form-group mb-3">
