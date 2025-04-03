@@ -36,6 +36,13 @@ spring:
                   - "profile"
             require-authorization-consent: true
 
+  thymeleaf:
+    cache: false                   # Отключаем кэш для разработки
+    prefix: classpath:/templates/  # Путь к шаблонам
+    suffix: .html                  # Суффикс файлов
+    encoding: UTF-8                # Кодировка
+    mode: HTML                     # Режим шаблонов (HTML5)
+
 # Secret key для JWT
 jwt:
   secret: MySuperSecretKeyForJWT
