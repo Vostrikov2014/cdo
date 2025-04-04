@@ -144,6 +144,7 @@ const App = () => {
                             <Route path="/home-video-conf" element={<HomeVideoConf/>}/>
                             <Route path="/conference/:roomName" element={<ConfStart/>}/>
                             <Route path="/schedule" element={<Schedule />} />
+                            <Route path="/callback" element={<Callback />} />
                         </Routes>
                     </div>
                 )
@@ -171,6 +172,7 @@ const App = () => {
                                 <Route path="/add-classroom" element={<AddClassroom />} />
                                 <Route path="/students" element={<StudentList />} />
                                 <Route path="/classrooms" element={<ClassroomList />} />
+                                <Route path="/callback" element={<Callback />} />
                             </Routes>
                         </div>
                     </Layout>

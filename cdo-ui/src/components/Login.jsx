@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {BASE_URL, AUTH_URL} from '../config';
 import {Link, useNavigate} from "react-router-dom";
+import { AuthContext } from './AuthProvider';
 
 //import {ReactKeycloakProvider} from "@react-keycloak/web";
 //import keycloakConfig from "./KeycloakConfig.jsx";
@@ -14,6 +15,8 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    const { login } = useContext(AuthContext);
 
     // Используем хук useKeycloak для получения информации о Keycloak
     /*const { keycloak, initialized } = useKeycloak();
