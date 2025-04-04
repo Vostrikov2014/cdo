@@ -18,8 +18,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -42,7 +40,7 @@ public class SecurityConfig {
                                 .oidc(Customizer.withDefaults())    // Enable OpenID Connect 1.0
                 )
                 .authorizeHttpRequests(authorize ->
-                        authorize.requestMatchers("/api/auth/register").permitAll()
+                        authorize.requestMatchers("/", "/register", "/api/auth/register").permitAll()
                                 .anyRequest().authenticated()
                 )
                 // Redirect to the login page when not authenticated from the
@@ -62,12 +60,14 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests((authorize) ->
+                                authorize.requestMatchers("/", "/register", "/login", "/api/auth/register").permitAll()
+                                        .anyRequest().authenticated()
                 )
                 // Form login handles the redirect to the login page from the
                 // authorization server filter chain
-                .formLogin(Customizer.withDefaults());
+                .formLogin(Customizer.withDefaults()
+                );
 
         return http.build();
     }
