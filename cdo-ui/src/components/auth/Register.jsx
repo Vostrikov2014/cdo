@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {BASE_URL, AUTH_URL} from '../config';
+import {BASE_URL, AUTH_URL} from '../../config.js';
 import {useNavigate} from "react-router-dom";
 
 const Register = () => {

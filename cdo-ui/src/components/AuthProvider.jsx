@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { authConfig } from './config';
-import { generatePKCE } from './pkce';
+import { authConfig } from '../config';
+import { generatePKCE } from './pkce.jsx';
 
 export const AuthContext = createContext();
 

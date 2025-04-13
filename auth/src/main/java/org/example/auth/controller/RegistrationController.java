@@ -18,6 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Set;
 
+/**
+ * ИСОЛЬЗУЕТ ВСТРОЕННУЮ ФОРМУ РЕГИСТРАЦИИ<br>
+ * Контроллер для обработки запросов регистрации новых пользователей.
+ * Обеспечивает отображение формы регистрации и обработку данных нового пользователя.
+ */
 @Controller
 @RequiredArgsConstructor
 public class RegistrationController {
@@ -26,12 +31,27 @@ public class RegistrationController {
     private final PasswordEncoder passwordEncoder;
     private final JdbcUserDetailsManager userDetailsManager;
 
+    /**
+     * Отображает форму регистрации нового пользователя.
+     *
+     * @param model Модель для передачи данных в представление
+     * @return Имя шаблона формы регистрации
+     */
     @GetMapping("/")
     public String registrationForm(Model model) {
         model.addAttribute("user", new RegisterRequest());
         return "registration";
     }
 
+    /**
+     * Обрабатывает отправку формы регистрации.
+     * Создает нового пользователя с закодированным паролем и базовой ролью USER.
+     *
+     * @param user Объект с данными из формы регистрации
+     * @param result Объект для хранения результатов валидации
+     * @return Перенаправление на страницу входа при успешной регистрации
+     *         или возврат к форме при ошибках валидации
+     */
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("user") RegisterRequest user, BindingResult result) {
 

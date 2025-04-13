@@ -1,13 +1,9 @@
 import React, {useState, useEffect, useContext} from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import {BASE_URL, AUTH_URL} from '../config';
+import {BASE_URL, AUTH_URL} from '../../config.js';
 import {Link, useNavigate} from "react-router-dom";
-import { AuthContext } from './AuthProvider';
-
-//import {ReactKeycloakProvider} from "@react-keycloak/web";
-//import keycloakConfig from "./KeycloakConfig.jsx";
-//import { useKeycloak } from '@react-keycloak/web';
+import { AuthContext } from '../AuthProvider.jsx';
 
 const Login = () => {
 
@@ -17,15 +13,6 @@ const Login = () => {
     const navigate = useNavigate();
 
     const { login } = useContext(AuthContext);
-
-    // Используем хук useKeycloak для получения информации о Keycloak
-    /*const { keycloak, initialized } = useKeycloak();
-
-    useEffect(() => {
-        if (initialized && keycloak.authenticated) {
-            setUsername(keycloak.tokenParsed?.preferred_username || "fix");
-        }
-    }, [initialized, keycloak]);*/
 
     // Проверка сессии при загрузке компонента
     useEffect(() => {

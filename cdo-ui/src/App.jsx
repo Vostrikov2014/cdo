@@ -3,9 +3,9 @@ import {BrowserRouter, Link, Route, Routes, useLocation} from 'react-router-dom'
 import Logo from './components/Logo.jsx';
 import Index from './components/Index.jsx';
 import HomeVideoConf from './components/videoconf/HomeVideoConf.jsx';
-import Login from './components/Login.jsx';
+import Login from './components/auth/Login.jsx';
 import LoginPage from './components/LoginPage.jsx';
-import Register from './components/Register.jsx';
+import Register from './components/auth/Register.jsx';
 import ConfStart from "./components/videoconf/ConfStart.jsx";
 import ConfCreateUpdate from "./components/videoconf/ConfCreateUpdate.jsx";
 import ConfList from "./components/videoconf/ConfList.jsx";

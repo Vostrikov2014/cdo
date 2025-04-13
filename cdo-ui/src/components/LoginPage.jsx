@@ -4,6 +4,10 @@ import React, {useState, useEffect} from 'react';
 //import {useKeycloak} from '@react-keycloak/web';
 //import {useNavigate} from 'react-router-dom';
 
+
+// ДУБДЬ ДЛЯ КУЙКЛОАК  -   ИСЛЬЗОВАТЬ Loin.jsx
+
+
 const LoginPage = () => {
 
     const [username, setUsername] = useState('');

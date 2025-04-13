@@ -1,5 +1,5 @@
 server:
-  port: 8096
+  port: 9001
 
 spring:
   application:
@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:3306/auth1
     username: vd
-    password: 111
+    password: 1111
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
