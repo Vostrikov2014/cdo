@@ -51,13 +51,13 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(token -> token.jwtAuthenticationConverter(new CustomAuthenticationConverter())));*/ // Настройка JWT аутентификации
 
         //Spring Security
-        http.csrf(AbstractHttpConfigurer::disable)                                            // Отключаем CSRF для прототипов REST API
+        http.csrf(AbstractHttpConfigurer::disable)                                           // Отключаем CSRF для прототипов REST API
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))                // Включаем CORS
             .authorizeHttpRequests(authorize -> authorize
                    .requestMatchers("/login", "/register", "/username").permitAll()    // Доступ без аутентификации
                    .anyRequest().authenticated()                                             // Требуется аутентификация для остальных запросов
             );
-            //.httpBasic(Customizer.withDefaults());                                            // Это использует стандартные настройки CORS
+            //.httpBasic(Customizer.withDefaults());                                           // Это использует стандартные настройки CORS
 
         // Authorization server configuration
         http.oauth2ResourceServer(
